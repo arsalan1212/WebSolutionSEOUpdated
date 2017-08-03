@@ -5,98 +5,158 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.arsalankhan.websolutionseo.SingleVideoActivity">
-
     <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtubeplayerView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:id="@+id/youtubeplayerView">
-    </com.google.android.youtube.player.YouTubePlayerView>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/singleVideoTitle"
-            android:text="Video Title"
-            android:textSize="18sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_below="@id/youtubeplayerView"
-            android:textColor="?android:attr/textColorPrimaryDisableOnly"/>
-
-
+        android:layout_height="200dp"></com.google.android.youtube.player.YouTubePlayerView>
+    <TextView
+        android:id="@+id/singleVideoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Video Title"
+        android:textColor="?android:attr/textColorPrimaryDisableOnly"
+        android:textSize="18sp"
+        android:layout_below="@id/youtubeplayerView"/>
     <LinearLayout
+        android:id="@+id/allViewParentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/singleVideoTitle"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:paddingBottom="10dp"
+        android:orientation="vertical"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3404 views"
-            android:id="@+id/videoViews"
-            android:textSize="15sp"
-            android:layout_gravity="center"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/layout_singleVideoAllViews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/singleVideoTitle"
             android:orientation="vertical"
-            android:layout_marginLeft="22dp"
+            android:visibility="gone"
             >
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/thumb_up"/>
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout_comments"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="30M"
-                android:layout_marginTop="5dp"
-                android:id="@+id/tv_likes"/>
+                android:layout_below="@id/singleVideoTitle"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/videoViews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="3404 views"
+                    android:textSize="15sp"
+                    android:layout_weight="2"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/thumb_up" />
+
+                    <TextView
+                        android:id="@+id/tv_likes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30M" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/thumb_down" />
+
+                    <TextView
+                        android:id="@+id/tv_unlikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30M" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E2E2E2"
+                android:layout_marginBottom="8dp"/>
+            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/logo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Channel TTILE"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/channelTitle"
+                    android:layout_weight="2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Comments"
+                    android:textColor="?android:attr/textColorPrimaryDisableOnly"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_commentsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:text="4000" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E2E2E2"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/commentsRecyclerView"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="22dp"
-            >
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/thumb_down"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30M"
-                android:layout_marginTop="5dp"
-                android:id="@+id/tv_unlikes"/>
-        </LinearLayout>
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:text="Comments"
-          android:textSize="16sp"
-          android:layout_marginLeft="22dp"
-          android:textColor="?android:attr/textColorPrimaryDisableOnly"
-          />
-        <TextView
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="4000"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/tv_commentsCount"
-            />
+            android:id="@+id/commentsSection_progress"/>
     </LinearLayout>
+
 </RelativeLayout>

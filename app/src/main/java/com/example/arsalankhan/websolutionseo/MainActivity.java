@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         ConnectionLayout= (LinearLayout) findViewById(R.id.layout_Connection);
         mProgress= (ProgressBar) findViewById(R.id.progresbar);
 
+
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         playlistRecyclerView.setHasFixedSize(true);
 
