@@ -14,7 +14,7 @@
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110dp"
-        app:srcCompat="@drawable/app_icon" />
+        app:srcCompat="@drawable/app_logo" />
     <TextView
         android:id="@+id/tv_title"
         android:layout_below="@id/app_logo"
