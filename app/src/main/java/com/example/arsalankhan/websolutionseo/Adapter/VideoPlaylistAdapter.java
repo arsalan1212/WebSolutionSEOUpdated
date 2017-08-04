@@ -47,7 +47,6 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
 
 
         Picasso.with(context).load(helper.getThumbnail()).placeholder(R.drawable.placeholder).into(holder.thumnailImage);
-        holder.logoImage.setImageResource(R.drawable.logo);
         holder.videoTitle.setText(helper.getTitle());
         holder.channelTitle.setText(helper.getChannelTitle());
 
@@ -80,7 +79,6 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView thumnailImage;
-        private ImageView logoImage;
         private TextView videoTitle,videoPublishAt;
         private TextView channelTitle;
          Context context;
@@ -89,7 +87,6 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
             this.context=context;
 
             thumnailImage=itemView.findViewById(R.id.thumbnail_Imageview);
-            logoImage=itemView.findViewById(R.id.logo_ImageView);
             videoTitle=itemView.findViewById(R.id.tv_VideoTitle);
             channelTitle=itemView.findViewById(R.id.tv_channelTitle);
             videoPublishAt = itemView.findViewById(R.id.tv_main_publishAt);
