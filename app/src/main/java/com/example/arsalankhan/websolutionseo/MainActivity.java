@@ -33,12 +33,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String playlistId="PLuRcKOVytKXXT8YqZrf7cIazVVkIEbgLf";
+    private static final String channelId="UCBRBgsoUC893QzkPRsdx8GQ";
     private static final String MaxResult="50";
     public static final String DeveloperKey="AIzaSyDJqOUx2KV3HvgOYBsBhZ8rDcJ0xxMIsx4";
 
-    private static String playlistUrl="https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId="
-            +playlistId+"&key="+DeveloperKey+"&maxResults="+MaxResult;
+    private static String channelUrl ="https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId="
+                                       +channelId+"&maxResults="+MaxResult+"&key="+DeveloperKey;
 
     private TextView tv_connectionStatus;
     private RecyclerView playlistRecyclerView;
@@ -72,10 +72,11 @@ public class MainActivity extends AppCompatActivity {
     //getting the response
     private void GetResponse() {
 
-        StringRequest request=new StringRequest(Request.Method.GET, playlistUrl, new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.GET, channelUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(response!=null){
+
                     ConnectionLayout.setVisibility(View.GONE);
                     playlistRecyclerView.setVisibility(View.VISIBLE);
                     mProgress.setVisibility(View.GONE);
@@ -84,43 +85,51 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject parentJsonObject=new JSONObject(response.toString());
                         JSONArray parentJsonArray=parentJsonObject.getJSONArray("items");
 
-                        for(int i=0; i<parentJsonArray.length(); i++){
+                        for(int i=0; i<parentJsonArray.length(); i++) {
 
-                            JSONObject childJsonObject=parentJsonArray.getJSONObject(i);
+                            //TODO AT THESE TWO INDEX THERE IS PLAYLIST AND CHANNEL OBJECT
+                            if (i == 8 || i == 12) {
+                                //DO nothing
+                                //We don't channel and playlist object
+                            }
+                            else
+                            {
+                                JSONObject childJsonObject = parentJsonArray.getJSONObject(i);
+                                Log.d("TAG","TOTAL: "+i);
+                                // getting video id
+                                JSONObject jsonObjectVideoId = childJsonObject.getJSONObject("id");
+                                String videoId = jsonObjectVideoId.getString("videoId");
 
-                            //Snippet Object
-                            JSONObject snippetObject=childJsonObject.getJSONObject("snippet");
+                                //Snippet Object
+                                JSONObject snippetObject = childJsonObject.getJSONObject("snippet");
 
-                            String title=snippetObject.getString("title");
-                            String description = snippetObject.getString("description");
-                            String channelTitle=snippetObject.getString("channelTitle");
-                            String publishDate = snippetObject.getString("publishedAt");
+                                String title = snippetObject.getString("title");
+                                String description = snippetObject.getString("description");
+                                String channelTitle = snippetObject.getString("channelTitle");
+                                String publishDate = snippetObject.getString("publishedAt");
 
-                            //Thumbnails Ojbect
-                            JSONObject thumbnailObject= snippetObject.getJSONObject("thumbnails");
-                            JSONObject highRsImageObject=thumbnailObject.getJSONObject("medium");
+                                //Thumbnails Ojbect
+                                JSONObject thumbnailObject = snippetObject.getJSONObject("thumbnails");
+                                JSONObject highRsImageObject = thumbnailObject.getJSONObject("medium");
 
-                            String thumnail = highRsImageObject.getString("url");
+                                String thumnail = highRsImageObject.getString("url");
 
-                            //video url object
-                            JSONObject videoIdObject= snippetObject.getJSONObject("resourceId");
 
-                            String videoId= videoIdObject.getString("videoId");
+                                //Now creating helper class object and storing each video data
+                                PlaylistHelper helper = new PlaylistHelper(title, description, thumnail, videoId, channelTitle, publishDate);
+                                playlistVideoArraylist.add(helper);
 
-                            //Now creating helper class object and storing each video data
-                            PlaylistHelper helper = new PlaylistHelper(title,description,thumnail,videoId,channelTitle,publishDate);
-                            playlistVideoArraylist.add(helper);
+                            }
+
+                            //now setting the Adapter
+                            VideoPlaylistAdapter adapter = new VideoPlaylistAdapter(MainActivity.this, playlistVideoArraylist);
+                            playlistRecyclerView.setAdapter(adapter);
 
                         }
-
-                        //now setting the Adapter
-                        VideoPlaylistAdapter adapter=new VideoPlaylistAdapter(MainActivity.this,playlistVideoArraylist);
-                        playlistRecyclerView.setAdapter(adapter);
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                             Log.d("TAG","Error: "+e.toString());
+                        Log.d("TAG",e.getMessage());
                     }
                 }
 
