@@ -51,7 +51,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
 
         if(replyCount!=0){
             holder.replyCountView.setVisibility(View.VISIBLE);
-            holder.replyCountView.setText(replyCount+" reply by PSX Training");
+            holder.replyCountView.setText("Total reply: "+replyCount);
         }
         else{
             holder.replyCountView.setVisibility(View.GONE);
