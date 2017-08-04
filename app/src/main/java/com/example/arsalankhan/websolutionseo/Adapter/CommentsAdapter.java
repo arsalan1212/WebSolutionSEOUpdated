@@ -47,6 +47,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         holder.DisplayNameView.setText(helper.getDisplayName());
         holder.CommentsTextView.setText(helper.getComment());
 
+        int replyCount= Integer.parseInt(helper.getReplyCount());
+
+        if(replyCount!=0){
+            holder.replyCountView.setVisibility(View.VISIBLE);
+            holder.replyCountView.setText(replyCount+" reply by PSX Training");
+        }
+        else{
+            holder.replyCountView.setVisibility(View.GONE);
+        }
+
+
 
         // for getting date in this formate i.e. 3 months ago
         long now = System.currentTimeMillis();
@@ -80,7 +91,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         private CircleImageView imageView;
-        private TextView DisplayNameView,CommentsTextView, publishAtView;
+        private TextView DisplayNameView,CommentsTextView, publishAtView, replyCountView;
         public MyViewHolder(View itemView) {
             super(itemView);
 
@@ -88,6 +99,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
             DisplayNameView = itemView.findViewById(R.id.tv_commentAuthorName);
             CommentsTextView = itemView.findViewById(R.id.tv_commentText);
             publishAtView = itemView.findViewById(R.id.tv_comment_publishAt);
+            replyCountView = itemView.findViewById(R.id.tv_replyCount);
 
         }
     }

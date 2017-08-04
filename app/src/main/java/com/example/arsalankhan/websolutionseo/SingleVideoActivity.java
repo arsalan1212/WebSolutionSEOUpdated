@@ -60,7 +60,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         if(intent!=null){
             videoId = intent.getStringExtra("videoId");
             String videoTitle=intent.getStringExtra("videoTitle");
-            String ChannelTitle=intent.getStringExtra("channelTitle");
+            String ChannelTitle= intent.getStringExtra("channelTitle");
 
             tv_videoTitle.setText(videoTitle);
             tv_channelTitle.setText(ChannelTitle);
@@ -84,6 +84,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         tv_Comments= findViewById(R.id.tv_commentsCount);
         allViewsLayout= findViewById(R.id.layout_singleVideoAllViews);
         tv_channelTitle=findViewById(R.id.channelTitle);
+
         mProgress=findViewById(R.id.commentsSection_progress);
 
         mCommentsRecyclerView= findViewById(R.id.commentsRecyclerView);
@@ -206,9 +207,10 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                             String displayName= jsonObjectChildSnippet.getString("authorDisplayName");
                             String profileImageUri = jsonObjectChildSnippet.getString("authorProfileImageUrl");
                             String commentText = jsonObjectChildSnippet.getString("textDisplay");
+                            String replyCount = jsonObjectSnippet.getString("totalReplyCount");
                             String publishedAt = jsonObjectChildSnippet.getString("publishedAt");
 
-                            CommentsHelper helper = new CommentsHelper(displayName,profileImageUri,commentText,publishedAt);
+                            CommentsHelper helper = new CommentsHelper(displayName,profileImageUri,commentText,replyCount,publishedAt);
 
                             arraylist_AllComments.add(helper);
                         }

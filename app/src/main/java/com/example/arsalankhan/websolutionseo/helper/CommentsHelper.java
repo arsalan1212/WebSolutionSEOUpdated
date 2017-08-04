@@ -10,12 +10,23 @@ public class CommentsHelper {
     private String profileImage;
     private String comment;
     private String publishedAt;
+    private String replyCount;
 
-    public CommentsHelper(String displayName, String profileImage, String comment, String publishedAt) {
+
+    public CommentsHelper(String displayName, String profileImage, String comment, String replyCount,String publishedAt) {
         DisplayName = displayName;
         this.profileImage = profileImage;
         this.comment = comment;
+        this.replyCount = replyCount;
         this.publishedAt = publishedAt;
+    }
+
+    public String getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(String replyCount) {
+        this.replyCount = replyCount;
     }
 
     public String getDisplayName() {
