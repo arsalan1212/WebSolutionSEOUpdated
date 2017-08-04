@@ -41,7 +41,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     private ArrayList<TotalViewsHelper> arraylist_TotalViews=new ArrayList<>();
     private ArrayList<CommentsHelper> arraylist_AllComments = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +89,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         mCommentsRecyclerView= findViewById(R.id.commentsRecyclerView);
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCommentsRecyclerView.setHasFixedSize(true);
-
     }
 
     @Override

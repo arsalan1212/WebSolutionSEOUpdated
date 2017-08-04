@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mProgress;
     private Toolbar mToolbar;
     private ArrayList<PlaylistHelper> playlistVideoArraylist=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
         GetResponse();
 
     }
-
-
     //getting the response
     private void GetResponse() {
 
@@ -153,8 +152,6 @@ public class MainActivity extends AppCompatActivity {
 
         MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
     }
-
-
 
 
 
