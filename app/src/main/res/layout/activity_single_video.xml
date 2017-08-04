@@ -71,7 +71,8 @@
                         android:id="@+id/tv_likes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="30M" />
+                        android:text="30M"
+                        android:gravity="center"/>
                 </LinearLayout>
 
 
@@ -91,7 +92,8 @@
                         android:id="@+id/tv_unlikes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="30M" />
+                        android:text="30M"
+                        android:gravity="center"/>
                 </LinearLayout>
 
             </LinearLayout>

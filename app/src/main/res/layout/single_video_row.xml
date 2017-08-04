@@ -10,6 +10,7 @@
     android:layout_marginTop="10dp"
     card_view:cardBackgroundColor="#FFFFFFFF"
     card_view:cardCornerRadius="6dp"
+    app:cardCornerRadius="6dp"
     card_view:cardElevation="5dp"
     android:clickable="true"
     android:onClick="quit">
