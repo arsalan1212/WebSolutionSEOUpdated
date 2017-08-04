@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView playlistRecyclerView;
     private LinearLayout ConnectionLayout;
     private ProgressBar mProgress;
+    private Toolbar mToolbar;
     private ArrayList<PlaylistHelper> playlistVideoArraylist=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         playlistRecyclerView= (RecyclerView) findViewById(R.id.playlist_RecyclerView);
         ConnectionLayout= (LinearLayout) findViewById(R.id.layout_Connection);
         mProgress= (ProgressBar) findViewById(R.id.progresbar);
+        mToolbar = (Toolbar) findViewById(R.id.main_app_bar);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("PSX Training");
 
 
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,21 +91,25 @@ public class MainActivity extends AppCompatActivity {
 
                             //Snippet Object
                             JSONObject snippetObject=childJsonObject.getJSONObject("snippet");
+
                             String title=snippetObject.getString("title");
                             String description = snippetObject.getString("description");
                             String channelTitle=snippetObject.getString("channelTitle");
+                            String publishDate = snippetObject.getString("publishedAt");
 
                             //Thumbnails Ojbect
                             JSONObject thumbnailObject= snippetObject.getJSONObject("thumbnails");
                             JSONObject highRsImageObject=thumbnailObject.getJSONObject("medium");
+
                             String thumnail = highRsImageObject.getString("url");
 
                             //video url object
                             JSONObject videoIdObject= snippetObject.getJSONObject("resourceId");
+
                             String videoId= videoIdObject.getString("videoId");
 
                             //Now creating helper class object and storing each video data
-                            PlaylistHelper helper = new PlaylistHelper(title,description,thumnail,videoId,channelTitle);
+                            PlaylistHelper helper = new PlaylistHelper(title,description,thumnail,videoId,channelTitle,publishDate);
                             playlistVideoArraylist.add(helper);
 
                         }

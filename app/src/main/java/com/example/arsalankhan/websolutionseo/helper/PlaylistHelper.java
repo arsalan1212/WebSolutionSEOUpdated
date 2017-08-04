@@ -11,17 +11,27 @@ public class PlaylistHelper {
     private String thumbnail;
     private String videoId;
     private String channelTitle;
+    private String VideopublishDate;
 
     public PlaylistHelper(){
 
     }
 
-    public PlaylistHelper(String title, String description, String thumbnail, String videoId, String channelTitle) {
+    public PlaylistHelper(String title, String description, String thumbnail, String videoId, String channelTitle,String videopublishDate) {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.videoId = videoId;
         this.channelTitle = channelTitle;
+        this.VideopublishDate = videopublishDate;
+    }
+
+    public String getVideopublishDate() {
+        return VideopublishDate;
+    }
+
+    public void setVideopublishDate(String videopublishDate) {
+        VideopublishDate = videopublishDate;
     }
 
     public String getTitle() {

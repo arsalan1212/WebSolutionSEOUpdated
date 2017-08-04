@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
        android:padding="10dp"
         android:gravity="center"
-        android:text="WebSolutionSEO"
+        android:text="@string/websolutionseo"
         android:textColor="#555"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -52,7 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="Loading..."
+        android:text="@string/tv_loading"
         android:textColor="#FF4f4f4f"
         android:textSize="25sp"
         android:textStyle="bold" />
