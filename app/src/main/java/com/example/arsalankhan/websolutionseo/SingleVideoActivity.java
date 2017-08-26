@@ -2,27 +2,46 @@ package com.example.arsalankhan.websolutionseo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.arsalankhan.websolutionseo.Adapter.CommentsAdapter;
-import com.example.arsalankhan.websolutionseo.helper.CommentsHelper;
 import com.example.arsalankhan.websolutionseo.helper.TotalViewsHelper;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,21 +53,28 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     private YouTubePlayerView mYoutubePlayerView;
     private String videoId;
-    private TextView tv_videoTitle,tv_Comments,tv_likes,tv_dislikes,tv_views,tv_channelTitle;
-    private RecyclerView mCommentsRecyclerView;
+    private TextView tv_videoTitle,tv_likes,tv_dislikes,tv_views;
     private LinearLayout allViewsLayout;
     private ProgressBar mProgress;
+    private SignInButton mGoogleButton;
 
     private ArrayList<TotalViewsHelper> arraylist_TotalViews=new ArrayList<>();
-    private ArrayList<CommentsHelper> arraylist_AllComments = new ArrayList<>();
+    private FirebaseAuth mAuth;
+    private CallbackManager mCallbackManager;
+    private String TAG="Facebook";
+    private static final int RC_SIGN_IN=1;
+    private GoogleApiClient mGoogleApiClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_single_video);
 
 
         mYoutubePlayerView = findViewById(R.id.youtubeplayerView);
         mYoutubePlayerView.initialize(MainActivity.DeveloperKey,this);
+
 
         //Initializing all views
         initActivityViews();
@@ -59,20 +85,67 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         if(intent!=null){
             videoId = intent.getStringExtra("videoId");
             String videoTitle=intent.getStringExtra("videoTitle");
-            String ChannelTitle= intent.getStringExtra("channelTitle");
-
             tv_videoTitle.setText(videoTitle);
-            tv_channelTitle.setText(ChannelTitle);
         }
 
         // Getting total views, likes and dislikes
         getViewsResponse();
 
-        //getting all comments on a video
-        getAllComments();
+        //Facebook login
+        FacebookLogin();
+
+        //For google SignIn
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                          .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                          .build();
+
+        mGoogleButton = findViewById(R.id.google_sign_in_btn);
+        mGoogleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
+
+        // Google SignIn End
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        CheckCurrentUserStatus();
 
     }
 
+    //Checking the user is login or not
+    private void CheckCurrentUserStatus() {
+        LinearLayout layout_signIn = findViewById(R.id.layout_SignUp);
+
+        RelativeLayout layout_chat = findViewById(R.id.layout_chat);
+
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mcurrentUser = mAuth.getCurrentUser();
+        if(mcurrentUser==null){
+          //  User is Not login
+            layout_signIn.setVisibility(View.VISIBLE);
+            layout_chat.setVisibility(View.GONE);
+        }
+        else
+        {
+            //User is login
+            layout_signIn.setVisibility(View.GONE);
+            layout_chat.setVisibility(View.VISIBLE);
+
+        }
+    }
 
     private void initActivityViews() {
 
@@ -80,15 +153,11 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         tv_views= findViewById(R.id.videoViews);
         tv_likes=findViewById(R.id.tv_likes);
         tv_dislikes=findViewById(R.id.tv_unlikes);
-        tv_Comments= findViewById(R.id.tv_commentsCount);
         allViewsLayout= findViewById(R.id.layout_singleVideoAllViews);
-        tv_channelTitle=findViewById(R.id.channelTitle);
 
         mProgress=findViewById(R.id.commentsSection_progress);
 
-        mCommentsRecyclerView= findViewById(R.id.commentsRecyclerView);
-        mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mCommentsRecyclerView.setHasFixedSize(true);
+
     }
 
     @Override
@@ -172,65 +241,120 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             tv_views.setText(helper.getTotalViews()+" views");
             tv_likes.setText(helper.getTotalLiskes());
             tv_dislikes.setText(helper.getTotlaDislikes());
-            tv_Comments.setText(helper.getCommentCount());
         }
     }
 
 
+    //For Google
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
 
-    //getting all Comments of a video
-    private void getAllComments() {
-        String url_comments="https://www.googleapis.com/youtube/v3/commentThreads?key="+MainActivity.DeveloperKey+"&textFormat=plainText&part=snippet&videoId="+videoId+"&maxResults=50";
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
-        StringRequest request = new StringRequest(Request.Method.GET, url_comments, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
 
-                if(response!=null){
+                            //Update UI if user is login or not
+                            CheckCurrentUserStatus();
 
-                    try {
-                        JSONObject parentJsonObject= new JSONObject(response.toString());
-                        JSONArray parentJsonArray= parentJsonObject.getJSONArray("items");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SingleVideoActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
 
-                        for (int i = 0; i < parentJsonArray.length() ; i++) {
-
-                            JSONObject jsonObjectItems= parentJsonArray.getJSONObject(i);
-
-                            JSONObject jsonObjectSnippet = jsonObjectItems.getJSONObject("snippet");
-
-                            JSONObject jsonObjectTopLevelComment = jsonObjectSnippet.getJSONObject("topLevelComment");
-
-                            JSONObject jsonObjectChildSnippet= jsonObjectTopLevelComment.getJSONObject("snippet");
-
-                            String displayName= jsonObjectChildSnippet.getString("authorDisplayName");
-                            String profileImageUri = jsonObjectChildSnippet.getString("authorProfileImageUrl");
-                            String commentText = jsonObjectChildSnippet.getString("textDisplay");
-                            String replyCount = jsonObjectSnippet.getString("totalReplyCount");
-                            String publishedAt = jsonObjectChildSnippet.getString("publishedAt");
-
-                            CommentsHelper helper = new CommentsHelper(displayName,profileImageUri,commentText,replyCount,publishedAt);
-
-                            arraylist_AllComments.add(helper);
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                });
+    }
 
-                    CommentsAdapter adapter = new CommentsAdapter(SingleVideoActivity.this,arraylist_AllComments);
-                    mCommentsRecyclerView.setAdapter(adapter);
-
-                }
-            }
-        }, new Response.ErrorListener() {
+    //--------------- ********************************** ------------------------------
+    // For FaceBook login
+    private void FacebookLogin(){
+        // Initialize Facebook Login button
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
 
-                Log.d("TAG","Error:  "+error.toString());
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // ...
             }
         });
-
-        MySingleton.getInstance(SingleVideoActivity.this).addToRequestQueue(request);
-        request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //For Facebook Login
+        // Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
+        //________________ **************************** ______________________________
+        //For Google SignIn
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                // ...
+                Toast.makeText(this, "SignIn Failed onActivityResult", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+
+                            //Update UI if user is login or not
+                            CheckCurrentUserStatus();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+                            Toast.makeText(SingleVideoActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
+    // facebook code end here.......
+
+
 }

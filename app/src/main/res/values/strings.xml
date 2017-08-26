@@ -3,4 +3,11 @@
     <string name="check_your_internet_connection">Check your Internet Connection</string>
     <string name="websolutionseo">WebSolutionSEO</string>
     <string name="tv_loading">Loading...</string>
+    <string name="join_chat_group">Join Chat Group</string>
+
+    <!-- for facebook login-->
+    <string name="facebook_app_id">496071707404080</string>
+    <string name="fb_login_protocol_scheme">fb496071707404080</string>
+    <string name="enter_your_message">Enter your Message</string>
+
 </resources>
