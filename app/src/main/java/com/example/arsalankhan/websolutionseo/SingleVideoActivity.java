@@ -235,6 +235,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                 Messages message =dataSnapshot.getValue(Messages.class);
                 messagesArrayList.add(message);
+                mChatRecyclerView.scrollToPosition(messagesArrayList.size()-1);
                 chatAdapter.notifyDataSetChanged();
             }
 

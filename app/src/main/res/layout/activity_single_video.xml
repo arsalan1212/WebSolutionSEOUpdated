@@ -193,6 +193,7 @@
            android:paddingRight="5dp"
             android:paddingLeft="5dp"
             android:id="@+id/layout_chat_input"
+
             >
 
             <EditText
@@ -202,7 +203,9 @@
                 android:layout_weight="9"
                 android:hint="@string/enter_your_message"
                 android:singleLine="true"
-                android:imeOptions="actionDone"/>
+                android:imeOptions="actionDone"
+                android:background="@drawable/edittext_background_style"
+                android:padding="10dp"/>
 
             <ImageButton
                 android:layout_width="0dp"
@@ -212,7 +215,9 @@
                 android:id="@+id/chat_sendBtn"
                 android:background="#fff"
                 android:layout_gravity="center"
-                android:onClick="chatSendButton"/>
+                android:onClick="chatSendButton"
+                android:padding="10dp"
+                />
 
         </LinearLayout>
     </RelativeLayout>
