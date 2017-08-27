@@ -218,6 +218,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
             Chat.getInstance().ChatWithUser(mAuth,message,videoId);
             editText.setText("");
+
+
         }
         else{
             Toast.makeText(this, "Please write some Message", Toast.LENGTH_SHORT).show();
@@ -238,6 +240,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                 messagesArrayList.add(message);
                 mChatRecyclerView.scrollToPosition(messagesArrayList.size()-1);
                 chatAdapter.notifyDataSetChanged();
+                startService(new Intent(SingleVideoActivity.this,MyNotificationAlertIntentService.class));
             }
 
             @Override
@@ -472,4 +475,9 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     // facebook code end here.......
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(SingleVideoActivity.this,MyNotificationAlertIntentService.class));
+    }
 }

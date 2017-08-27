@@ -26,12 +26,14 @@ public class Chat {
     }
 
 
-    public void ChatWithUser(FirebaseAuth mAuth, String message,String currentVideoId) {
+    public void ChatWithUser(FirebaseAuth mAuth, String message, String currentVideoId) {
 
 
         if(mAuth != null){
 
             DatabaseReference mChatRef = FirebaseDatabase.getInstance().getReference().child("Chat");
+            mChatRef.keepSynced(true);
+
 
             FirebaseUser mCurrentUser = mAuth.getCurrentUser();
             String Uid = mCurrentUser.getUid();
