@@ -20,6 +20,9 @@ allprojects {
 
         /*  For facebook login */
         mavenCentral()
+
+        /* For Bubble View */
+        maven { url 'https://jitpack.io' }
     }
 }
 

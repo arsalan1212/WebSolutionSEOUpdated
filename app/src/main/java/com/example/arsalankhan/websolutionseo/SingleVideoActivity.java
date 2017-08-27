@@ -1,10 +1,15 @@
 package com.example.arsalankhan.websolutionseo;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -15,6 +20,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.arsalankhan.websolutionseo.Adapter.ChatAdapter;
+import com.example.arsalankhan.websolutionseo.helper.Messages;
 import com.example.arsalankhan.websolutionseo.helper.TotalViewsHelper;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -42,6 +49,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +69,9 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private LinearLayout allViewsLayout;
     private ProgressBar mProgress;
     private SignInButton mGoogleButton;
+    private RecyclerView mChatRecyclerView;
+    private ChatAdapter chatAdapter;
+    private ArrayList<Messages> messagesArrayList = new ArrayList<>();
 
     private ArrayList<TotalViewsHelper> arraylist_TotalViews=new ArrayList<>();
     private FirebaseAuth mAuth;
@@ -64,6 +79,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private String TAG="Facebook";
     private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
+    private ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,12 +126,40 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             @Override
             public void onClick(View view) {
                 signIn();
+
+
             }
         });
 
         // Google SignIn End
+
+
+        //LoadAllMessages
+        loadMessages();
     }
 
+
+    private void initActivityViews() {
+
+        tv_videoTitle=findViewById(R.id.singleVideoTitle);
+        tv_views= findViewById(R.id.videoViews);
+        tv_likes=findViewById(R.id.tv_likes);
+        tv_dislikes=findViewById(R.id.tv_unlikes);
+        allViewsLayout= findViewById(R.id.layout_singleVideoAllViews);
+
+        mProgress=findViewById(R.id.commentsSection_progress);
+
+        mChatRecyclerView = findViewById(R.id.chatRecyclerView);
+        mChatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mChatRecyclerView.setHasFixedSize(true);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setTitle("Sign In");
+        mProgressDialog.setMessage("Please wait while we setup your Account");
+
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -130,34 +174,85 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
         RelativeLayout layout_chat = findViewById(R.id.layout_chat);
 
-
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mcurrentUser = mAuth.getCurrentUser();
-        if(mcurrentUser==null){
-          //  User is Not login
-            layout_signIn.setVisibility(View.VISIBLE);
-            layout_chat.setVisibility(View.GONE);
-        }
-        else
-        {
-            //User is login
-            layout_signIn.setVisibility(View.GONE);
-            layout_chat.setVisibility(View.VISIBLE);
+        if(mAuth != null){
+
+            FirebaseUser mcurrentUser = mAuth.getCurrentUser();
+
+            if(mcurrentUser==null){
+                //  User is Not login
+                layout_signIn.setVisibility(View.VISIBLE);
+                layout_chat.setVisibility(View.GONE);
+            }
+            else
+            {
+                //User is login
+                layout_signIn.setVisibility(View.GONE);
+                layout_chat.setVisibility(View.VISIBLE);
+
+
+                // initializing the Adapter
+                chatAdapter = new ChatAdapter(messagesArrayList,mcurrentUser.getUid());
+                mChatRecyclerView.setAdapter(chatAdapter);
+
+            }
 
         }
+
     }
 
-    private void initActivityViews() {
+    //Chat send Button
+    public void chatSendButton(View view){
 
-        tv_videoTitle=findViewById(R.id.singleVideoTitle);
-        tv_views= findViewById(R.id.videoViews);
-        tv_likes=findViewById(R.id.tv_likes);
-        tv_dislikes=findViewById(R.id.tv_unlikes);
-        allViewsLayout= findViewById(R.id.layout_singleVideoAllViews);
+        EditText editText = findViewById(R.id.ChateditText);
+        String message = editText.getText().toString().trim();
 
-        mProgress=findViewById(R.id.commentsSection_progress);
+        if(!TextUtils.isEmpty(message)){
+
+            Chat.getInstance().ChatWithUser(mAuth,message,videoId);
+            editText.setText("");
+        }
+        else{
+            Toast.makeText(this, "Please write some Message", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 
+    private void loadMessages(){
+
+        DatabaseReference mChatRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(videoId);
+
+        mChatRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Messages message =dataSnapshot.getValue(Messages.class);
+                messagesArrayList.add(message);
+                chatAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.d("TAG","Error: "+databaseError.getMessage());
+            }
+        });
     }
 
     @Override
@@ -265,6 +360,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                             //Update UI if user is login or not
                             CheckCurrentUserStatus();
 
+                            mProgressDialog.dismiss();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -287,6 +384,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
+
+                mProgressDialog.show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -320,6 +419,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
+                mProgressDialog.show();
+
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
@@ -342,6 +443,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                             //Update UI if user is login or not
                             CheckCurrentUserStatus();
+
+                            mProgressDialog.dismiss();
 
                         } else {
                             // If sign in fails, display a message to the user.

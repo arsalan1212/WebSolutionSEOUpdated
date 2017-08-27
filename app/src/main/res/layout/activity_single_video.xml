@@ -174,8 +174,9 @@
         >
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/chatRecyclerView">
+            android:layout_height="match_parent"
+            android:id="@+id/chatRecyclerView"
+            android:layout_above="@+id/layout_chat_input">
         </android.support.v7.widget.RecyclerView>
 
 
@@ -191,6 +192,7 @@
             android:background="#ffffff"
            android:paddingRight="5dp"
             android:paddingLeft="5dp"
+            android:id="@+id/layout_chat_input"
             >
 
             <EditText
