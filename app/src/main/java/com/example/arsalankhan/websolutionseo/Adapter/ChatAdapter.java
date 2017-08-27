@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.arsalankhan.websolutionseo.R;
 import com.example.arsalankhan.websolutionseo.helper.Messages;
 import com.github.library.bubbleview.BubbleTextView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -19,29 +20,33 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ALIGN_LEFT_POSITION=0;
     public static final int ALIGN_RIGHT_POSITION=1;
+    FirebaseAuth mAuth;
 
     ArrayList<Messages> messagesArrayList =new ArrayList<>();
-    String mCurrentUserId;
 
-    public ChatAdapter(ArrayList arrayList,String currentUserId){
+    public ChatAdapter(ArrayList arrayList){
         messagesArrayList = arrayList;
-        mCurrentUserId = currentUserId;
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        Messages messages = messagesArrayList.get(position);
+        if(mAuth != null){
+            String currentUserId = mAuth.getCurrentUser().getUid();
+            Messages messages = messagesArrayList.get(position);
 
-        if(messages.getSenderId().equals(mCurrentUserId)){
+            if(messages.getSenderId().equals(currentUserId)){
 
-            return ALIGN_RIGHT_POSITION;
-        }
-/*        else if (!messages.getUserId().equals(mCurrentUserId)){
+                return ALIGN_RIGHT_POSITION;
+            }
 
             return ALIGN_LEFT_POSITION;
-        }*/
-        return ALIGN_LEFT_POSITION;
+        }else{
+            return 10;
+        }
+
     }
 
     @Override

@@ -81,6 +81,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,9 +98,13 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         mYoutubePlayerView = findViewById(R.id.youtubeplayerView);
         mYoutubePlayerView.initialize(MainActivity.DeveloperKey,this);
 
-
         //Initializing all views
         initActivityViews();
+
+
+        // initializing the Adapter
+        chatAdapter = new ChatAdapter(messagesArrayList);
+        mChatRecyclerView.setAdapter(chatAdapter);
 
 
         //getting the intent data
@@ -140,8 +145,9 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         // Google SignIn End
 
 
-        //LoadAllMessages
+        //load messages into recyclerView
         loadMessages();
+
     }
 
 
@@ -181,9 +187,9 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         RelativeLayout layout_chat = findViewById(R.id.layout_chat);
 
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth != null){
+        FirebaseUser mcurrentUser = mAuth.getCurrentUser();
 
-            FirebaseUser mcurrentUser = mAuth.getCurrentUser();
+        if(mAuth != null){
 
             if(mcurrentUser==null){
                 //  User is Not login
@@ -195,11 +201,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                 //User is login
                 layout_signIn.setVisibility(View.GONE);
                 layout_chat.setVisibility(View.VISIBLE);
-
-
-                // initializing the Adapter
-                chatAdapter = new ChatAdapter(messagesArrayList,mcurrentUser.getUid());
-                mChatRecyclerView.setAdapter(chatAdapter);
 
             }
 
@@ -366,6 +367,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                             //Update UI if user is login or not
                             CheckCurrentUserStatus();
+                            //load messages into recyclerView
+                            loadMessages();
 
                             mProgressDialog.dismiss();
 
@@ -450,6 +453,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                             //Update UI if user is login or not
                             CheckCurrentUserStatus();
+                            //load messages into recyclerView
+                            loadMessages();
 
                             mProgressDialog.dismiss();
 
