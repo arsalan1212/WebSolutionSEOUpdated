@@ -12,8 +12,9 @@
 
 
     <!-- For Admob -->
-    <string name="Admob_App_id"> ca-app-pub-1775023839671556~4963841595</string>
-    <string name="Ad_unit_id">ca-app-pub-1775023839671556/9427143868</string>
+    <string name="Admob_App_id">ca-app-pub-1775023839671556~4963841595</string>
+    <string name="banner_unit_id">ca-app-pub-1775023839671556/9427143868</string>
+    <string name="Interstitial_unit_id">ca-app-pub-1775023839671556/7990116722</string>
 
 
 </resources>

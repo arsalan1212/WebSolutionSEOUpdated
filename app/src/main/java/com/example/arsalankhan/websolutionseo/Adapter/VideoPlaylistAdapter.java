@@ -1,7 +1,6 @@
 package com.example.arsalankhan.websolutionseo.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.arsalankhan.websolutionseo.R;
-import com.example.arsalankhan.websolutionseo.SingleVideoActivity;
 import com.example.arsalankhan.websolutionseo.helper.PlaylistHelper;
 import com.squareup.picasso.Picasso;
 
@@ -28,10 +26,12 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
 
     private ArrayList<PlaylistHelper> videoPlaylistArraylist=new ArrayList<>();
     private Context context;
+    private Communicator mcommunicator;
     public VideoPlaylistAdapter(Context context,ArrayList<PlaylistHelper> arrayList){
 
         videoPlaylistArraylist=arrayList;
         this.context=context;
+        mcommunicator = (Communicator) context;
     }
 
     @Override
@@ -96,16 +96,24 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
                 public void onClick(View view) {
 
                     String VideoId=videoPlaylistArraylist.get(getAdapterPosition()).getVideoId();
-
-                    Intent singleVideoIntent=new Intent(context, SingleVideoActivity.class);
+                    String videoTitle = videoPlaylistArraylist.get(getAdapterPosition()).getTitle();
+      /*              Intent singleVideoIntent=new Intent(context, SingleVideoActivity.class);
 
                     singleVideoIntent.putExtra("videoId",VideoId);
                     singleVideoIntent.putExtra("videoTitle",videoPlaylistArraylist.get(getAdapterPosition()).getTitle());
                     singleVideoIntent.putExtra("channelTitle",videoPlaylistArraylist.get(getAdapterPosition()).getChannelTitle());
-                    context.startActivity(singleVideoIntent);
+                    context.startActivity(singleVideoIntent);*/
+
+                    mcommunicator.setMessage(VideoId,videoTitle);
                 }
             });
         }
+    }
+
+
+   public interface Communicator{
+
+         void setMessage(String videoId,String VideoTitle);
     }
 }
 

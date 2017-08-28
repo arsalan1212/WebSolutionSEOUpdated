@@ -24,6 +24,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.arsalankhan.websolutionseo.Adapter.VideoPlaylistAdapter;
 import com.example.arsalankhan.websolutionseo.helper.PlaylistHelper;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VideoPlaylistAdapter.Communicator{
 
     private static final String channelId="UCBRBgsoUC893QzkPRsdx8GQ";
     private static final String MaxResult="50";
@@ -46,12 +51,24 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mProgress;
     private Toolbar mToolbar;
     private ArrayList<PlaylistHelper> playlistVideoArraylist=new ArrayList<>();
-
+    private AdView adView;
+    private InterstitialAd interstitialAd;
+    private String videoId,VideoTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //For Banner Ads
+        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        adView = (AdView) findViewById(R.id.main_adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        //setting interstitial Ad
+        setInterstitialAd();
+
+        //---------------- ************************** ---------------------
         tv_connectionStatus= (TextView) findViewById(R.id.tv_display_Connection_status);
         playlistRecyclerView= (RecyclerView) findViewById(R.id.playlist_RecyclerView);
         ConnectionLayout= (LinearLayout) findViewById(R.id.layout_Connection);
@@ -170,5 +187,47 @@ public class MainActivity extends AppCompatActivity {
         Intent refreshIntent=new Intent(this,MainActivity.class);
         startActivity(refreshIntent);
         finish();
+    }
+
+    private void setInterstitialAd(){
+
+        //For Interstitial Ad
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+
+                interstitialAd.loadAd(new AdRequest.Builder().build());
+                Intent singleVideoIntent = new Intent(MainActivity.this,SingleVideoActivity.class);
+                singleVideoIntent.putExtra("videoId",videoId);
+                singleVideoIntent.putExtra("videoTitle",VideoTitle);
+                startActivity(singleVideoIntent);
+
+            }
+        });
+
+
+
+    }
+    @Override
+    public void setMessage(String videoId, String VideoTitle) {
+
+        this.videoId = videoId;
+        this.VideoTitle = VideoTitle;
+
+        if(interstitialAd.isLoaded()){
+            interstitialAd.show();
+
+        }
+        else
+            {
+                Intent singleVideoIntent=new Intent(this, SingleVideoActivity.class);
+                singleVideoIntent.putExtra("videoId",videoId);
+                singleVideoIntent.putExtra("videoTitle",VideoTitle);
+                startActivity(singleVideoIntent);
+            }
     }
 }

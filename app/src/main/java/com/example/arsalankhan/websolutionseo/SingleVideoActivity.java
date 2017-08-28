@@ -34,6 +34,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -89,6 +90,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private String isTyping= "false";
     private String mCurrentUserId;
     private String msenderId;
+    private InterstitialAd interstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +158,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
         //load messages into recyclerView
         loadMessages();
+
 
     }
 
@@ -260,6 +263,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             }
 
         }
+
 
     }
 
@@ -389,6 +393,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         });
 
         MySingleton.getInstance(SingleVideoActivity.this).addToRequestQueue(request);
+
     }
 
     //setting views data i.e. likes, dislikes etc
@@ -527,7 +532,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     }
 
     // facebook code end here.......
-
 
     @Override
     protected void onDestroy() {
