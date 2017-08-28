@@ -8,14 +8,16 @@ public class Messages {
 
     private String senderId;
     private String message;
+    private String isTyping;
 
     public Messages(){
 
     }
 
-    public Messages(String userId, String message) {
+    public Messages(String userId, String message,String isTyping) {
         this.senderId = userId;
         this.message = message;
+        this.isTyping = isTyping;
     }
 
     public String getSenderId() {
@@ -34,5 +36,11 @@ public class Messages {
         this.message = message;
     }
 
+    public String isTyping() {
+        return isTyping;
+    }
 
+    public void setTyping(String typing) {
+        isTyping = typing;
+    }
 }

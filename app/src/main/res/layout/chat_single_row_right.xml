@@ -14,10 +14,12 @@
         app:angle="8dp"
         app:arrowHeight="10dp"
         app:arrowPosition="14dp"
-        app:arrowLocation="left"
+        app:arrowLocation="right"
         app:arrowCenter="true"
-        app:bubbleColor="#8034F9"
+        app:bubbleColor="#7EC0EE"
         android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
-        android:id="@+id/messageBubbleLeft"/>
+        android:id="@+id/messageBubbleRight"/>
 </RelativeLayout>

@@ -26,7 +26,7 @@ public class Chat {
     }
 
 
-    public void ChatWithUser(FirebaseAuth mAuth, String message, String currentVideoId) {
+    public void ChatWithUser(FirebaseAuth mAuth, String message) {
 
 
         if(mAuth != null){
@@ -38,15 +38,16 @@ public class Chat {
             FirebaseUser mCurrentUser = mAuth.getCurrentUser();
             String Uid = mCurrentUser.getUid();
 
-            Map currentVideoMap = new HashMap();
 
             Map chatMap = new HashMap();
             chatMap.put("senderId",Uid);
             chatMap.put("message",message);
+            chatMap.put("isTyping","false");
 
-            currentVideoMap.put(currentVideoId+"/"+mChatRef.push().getKey(),chatMap);
+            Map RefMap = new HashMap();
+            RefMap.put(mChatRef.push().getKey()+"/",chatMap);
 
-            mChatRef.updateChildren(currentVideoMap);
+            mChatRef.updateChildren(RefMap);
         }
 
 

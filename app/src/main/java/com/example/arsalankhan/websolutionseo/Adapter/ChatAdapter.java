@@ -33,7 +33,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
 
-        if(mAuth != null){
+        if(mAuth != null && messagesArrayList.size()!=0){
             String currentUserId = mAuth.getCurrentUser().getUid();
             Messages messages = messagesArrayList.get(position);
 
@@ -54,12 +54,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if(viewType == ALIGN_RIGHT_POSITION){
 
-            View viewRight = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_singe_row_right,parent,false);
+            View viewRight = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_single_row_right,parent,false);
             return new MyViewHolderRightBubble(viewRight);
         }
         else if(viewType == ALIGN_LEFT_POSITION){
 
-            View viewLeft = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_singe_row_left,parent,false);
+            View viewLeft = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_single_row_left,parent,false);
             return new MyViewHolderLeftBubble(viewLeft);
         }
         return null;

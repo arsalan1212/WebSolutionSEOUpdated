@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -55,6 +57,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,6 +84,11 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
+    private EditText editTextMessage;
+    private DatabaseReference mChatDatabaseRef;
+    private String isTyping= "false";
+    private String mCurrentUserId;
+    private String msenderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +109,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         //Initializing all views
         initActivityViews();
 
+        mChatDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Chat");
 
         // initializing the Adapter
         chatAdapter = new ChatAdapter(messagesArrayList);
@@ -170,6 +179,52 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         mProgressDialog.setTitle("Sign In");
         mProgressDialog.setMessage("Please wait while we setup your Account");
 
+        editTextMessage = findViewById(R.id.ChateditText);
+
+
+        //For listening the change in editText
+        editTextMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                mChatDatabaseRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                       /* Messages messages = dataSnapshot.getValue(Messages.class);
+
+                        msenderId = messages.getSenderId();
+                        Toast.makeText(SingleVideoActivity.this, "SenderId: "+msenderId, Toast.LENGTH_SHORT).show();*/
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                if(!TextUtils.isEmpty(charSequence) && charSequence.length() > 0){
+
+                    isTyping = "true";
+
+
+                }else{
+
+                    isTyping = "false";
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
     }
     @Override
@@ -188,7 +243,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser mcurrentUser = mAuth.getCurrentUser();
-
+        mCurrentUserId = mcurrentUser.getUid();
         if(mAuth != null){
 
             if(mcurrentUser==null){
@@ -211,13 +266,13 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     //Chat send Button
     public void chatSendButton(View view){
 
-        EditText editText = findViewById(R.id.ChateditText);
-        String message = editText.getText().toString().trim();
+
+        String message = editTextMessage.getText().toString().trim();
 
         if(!TextUtils.isEmpty(message)){
 
-            Chat.getInstance().ChatWithUser(mAuth,message,videoId);
-            editText.setText("");
+            Chat.getInstance().ChatWithUser(mAuth,message);
+            editTextMessage.setText("");
 
 
         }
@@ -230,9 +285,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     private void loadMessages(){
 
-        DatabaseReference mChatRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(videoId);
 
-        mChatRef.addChildEventListener(new ChildEventListener() {
+        mChatDatabaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
