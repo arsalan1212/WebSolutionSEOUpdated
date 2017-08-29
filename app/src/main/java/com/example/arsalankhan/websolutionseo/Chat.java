@@ -32,7 +32,6 @@ public class Chat {
         if(mAuth != null){
 
             DatabaseReference mChatRef = FirebaseDatabase.getInstance().getReference().child("Chat");
-            mChatRef.keepSynced(true);
 
 
             FirebaseUser mCurrentUser = mAuth.getCurrentUser();
@@ -42,7 +41,6 @@ public class Chat {
             Map chatMap = new HashMap();
             chatMap.put("senderId",Uid);
             chatMap.put("message",message);
-            chatMap.put("isTyping","false");
 
             Map RefMap = new HashMap();
             RefMap.put(mChatRef.push().getKey()+"/",chatMap);

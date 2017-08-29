@@ -58,13 +58,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
@@ -86,12 +87,12 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
     private EditText editTextMessage;
-    private DatabaseReference mChatDatabaseRef;
     private String isTyping= "false";
     private String mCurrentUserId;
     private String msenderId;
     private InterstitialAd interstitialAd;
     private String messageKey;
+    private DatabaseReference mTyperDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +107,15 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         setContentView(R.layout.activity_single_video);
 
 
+        mTyperDatabase = FirebaseDatabase.getInstance().getReference().child("TyperIndicator");
+
         mYoutubePlayerView = findViewById(R.id.youtubeplayerView);
         mYoutubePlayerView.initialize(MainActivity.DeveloperKey,this);
 
         //Initializing all views
         initActivityViews();
 
-        mChatDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Chat");
+
 
         // initializing the Adapter
         chatAdapter = new ChatAdapter(messagesArrayList);
@@ -196,7 +199,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                mChatDatabaseRef.addValueEventListener(new ValueEventListener() {
+               /* mChatDatabaseRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
@@ -209,10 +212,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                             }
 
                         }
-                       /* Messages messages = dataSnapshot.getValue(Messages.class);
-
-                        msenderId = messages.getSenderId();
-                        Toast.makeText(SingleVideoActivity.this, "SenderId: "+msenderId, Toast.LENGTH_SHORT).show();*/
                     }
 
                     @Override
@@ -220,23 +219,23 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                     }
                 });
-
+*/
 
                 if(!TextUtils.isEmpty(charSequence) && charSequence.length() > 0){
 
-                    if(mCurrentUserId.equals(msenderId)){
+/*                    if(mCurrentUserId.equals(msenderId)){
                         isTyping = "true";
                         mChatDatabaseRef.child(messageKey).child("isTyping").setValue(isTyping);
-                    }
+                    }*/
 
 
 
                 }else{
 
-                    if(mCurrentUserId.equals(msenderId)){
+/*                    if(mCurrentUserId.equals(msenderId)){
                         isTyping = "false";
                         mChatDatabaseRef.child(messageKey).child("isTyping").setValue(isTyping);
-                    }
+                    }*/
                 }
             }
 
@@ -280,6 +279,10 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                 mCurrentUserId = mcurrentUser.getUid();
 
+                Map typerMap = new HashMap();
+                typerMap.put("isTyping","false");
+                typerMap.put("senderId",mCurrentUserId);
+                mTyperDatabase.child(mCurrentUserId).updateChildren(typerMap);
             }
 
         }
@@ -309,6 +312,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     private void loadMessages(){
 
+        DatabaseReference mChatDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Chat");
 
         mChatDatabaseRef.addChildEventListener(new ChildEventListener() {
             @Override
