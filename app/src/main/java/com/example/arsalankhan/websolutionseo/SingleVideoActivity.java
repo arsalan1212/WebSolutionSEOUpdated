@@ -91,6 +91,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private String mCurrentUserId;
     private String msenderId;
     private InterstitialAd interstitialAd;
+    private String messageKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +199,16 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                 mChatDatabaseRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
 
+                            Messages messages = dataSnapshot1.getValue(Messages.class);
+                            msenderId = messages.getSenderId();
+
+                            if(msenderId.equals(mCurrentUserId)){
+                                messageKey = dataSnapshot1.getKey();
+                            }
+
+                        }
                        /* Messages messages = dataSnapshot.getValue(Messages.class);
 
                         msenderId = messages.getSenderId();
@@ -214,12 +224,19 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                 if(!TextUtils.isEmpty(charSequence) && charSequence.length() > 0){
 
-                    isTyping = "true";
+                    if(mCurrentUserId.equals(msenderId)){
+                        isTyping = "true";
+                        mChatDatabaseRef.child(messageKey).child("isTyping").setValue(isTyping);
+                    }
+
 
 
                 }else{
 
-                    isTyping = "false";
+                    if(mCurrentUserId.equals(msenderId)){
+                        isTyping = "false";
+                        mChatDatabaseRef.child(messageKey).child("isTyping").setValue(isTyping);
+                    }
                 }
             }
 
@@ -245,9 +262,10 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         RelativeLayout layout_chat = findViewById(R.id.layout_chat);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mcurrentUser = mAuth.getCurrentUser();
-        mCurrentUserId = mcurrentUser.getUid();
+
         if(mAuth != null){
+
+            FirebaseUser mcurrentUser = mAuth.getCurrentUser();
 
             if(mcurrentUser==null){
                 //  User is Not login
@@ -259,6 +277,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                 //User is login
                 layout_signIn.setVisibility(View.GONE);
                 layout_chat.setVisibility(View.VISIBLE);
+
+                mCurrentUserId = mcurrentUser.getUid();
 
             }
 
