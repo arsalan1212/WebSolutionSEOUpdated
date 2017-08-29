@@ -26,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.arsalankhan.websolutionseo.Adapter.ChatAdapter;
 import com.example.arsalankhan.websolutionseo.helper.Messages;
 import com.example.arsalankhan.websolutionseo.helper.TotalViewsHelper;
+import com.example.arsalankhan.websolutionseo.helper.TyperIndicator;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -34,7 +35,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -58,6 +58,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,11 +88,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
     private EditText editTextMessage;
-    private String isTyping= "false";
     private String mCurrentUserId;
     private String msenderId;
-    private InterstitialAd interstitialAd;
-    private String messageKey;
     private DatabaseReference mTyperDatabase;
 
     @Override
@@ -164,6 +162,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         loadMessages();
 
 
+        //checking someone is Typing or not
+        isUserTyping();
     }
 
 
@@ -223,19 +223,10 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                 if(!TextUtils.isEmpty(charSequence) && charSequence.length() > 0){
 
-/*                    if(mCurrentUserId.equals(msenderId)){
-                        isTyping = "true";
-                        mChatDatabaseRef.child(messageKey).child("isTyping").setValue(isTyping);
-                    }*/
-
-
+                    mTyperDatabase.child(mCurrentUserId).child("isTyping").setValue("true");
 
                 }else{
-
-/*                    if(mCurrentUserId.equals(msenderId)){
-                        isTyping = "false";
-                        mChatDatabaseRef.child(messageKey).child("isTyping").setValue(isTyping);
-                    }*/
+                    mTyperDatabase.child(mCurrentUserId).child("isTyping").setValue("false");
                 }
             }
 
@@ -251,6 +242,39 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         super.onStart();
 
         CheckCurrentUserStatus();
+
+    }
+//checking isUser is Typing or not
+    private void isUserTyping(){
+
+        mTyperDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                    TyperIndicator typer = snapshot.getValue(TyperIndicator.class);
+                    msenderId = typer.getSenderId();
+
+                    if(!msenderId.equals(mCurrentUserId)){
+
+                        String isTyping = typer.getIsTyping();
+
+                        if(isTyping.equals("true")){
+                            Log.d("TAG","Someone is Typing");
+                        }
+                        else{
+                            Log.d("TAG","Typing is stop");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -288,6 +312,12 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         }
 
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mTyperDatabase.child(mCurrentUserId).child("isTyping").setValue("false");
     }
 
     //Chat send Button

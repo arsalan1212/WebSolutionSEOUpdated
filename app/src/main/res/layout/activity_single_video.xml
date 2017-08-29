@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.arsalankhan.websolutionseo.SingleVideoActivity">
 
     <com.google.android.youtube.player.YouTubePlayerView
@@ -178,6 +179,7 @@
             android:id="@+id/chatRecyclerView"
             android:layout_above="@+id/layout_chat_input">
         </android.support.v7.widget.RecyclerView>
+
 
 
         <!-- Layout for chat input -->
