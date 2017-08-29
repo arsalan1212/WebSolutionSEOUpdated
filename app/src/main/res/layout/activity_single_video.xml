@@ -181,22 +181,43 @@
         </android.support.v7.widget.RecyclerView>
 
 
-
         <!-- Layout for chat input -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_chat_input"
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    >
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        android:visibility="visible"
+        app:indicatorColor="#FF4f4f4f"
+        app:indicatorName="BallBeatIndicator"
+        android:background="@drawable/type_indicator_bg"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+       android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
+        />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_alignParentBottom="true"
             android:weightSum="10"
             android:background="#ffffff"
-           android:paddingRight="5dp"
+            android:paddingRight="5dp"
             android:paddingLeft="5dp"
-            android:id="@+id/layout_chat_input"
-
             >
+
 
             <EditText
                 android:layout_width="0dp"
@@ -222,6 +243,7 @@
                 />
 
         </LinearLayout>
+</LinearLayout>
     </RelativeLayout>
 
 
