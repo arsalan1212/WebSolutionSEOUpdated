@@ -26,6 +26,7 @@ dependencies {
         compile files("libs/YouTubeAndroidPlayerApi.jar")
     })
 
+    //bubble view library
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:recyclerview-v7:26.+'
@@ -39,10 +40,8 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-database:10.0.1'
     compile 'com.google.android.gms:play-services-ads:10.0.1'
-    testCompile 'junit:junit:4.12'
-
-    //bubble view library
     compile 'com.github.lguipeng:BubbleView:1.0.1'
+    testCompile 'junit:junit:4.12'
 }
 // Add to the bottom of the file
 apply plugin: 'com.google.gms.google-services'

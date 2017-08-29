@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.example.arsalankhan.websolutionseo.SignInActivity">
+
+
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/app_logo"
+    android:id="@+id/signin_applogo"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="90dp"/>
+
+
+    <!--  Sign In Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/layout_SignUp"
+        android:layout_below="@id/signin_applogo"
+        android:layout_marginTop="40dp"
+        >
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/join_chat_group"
+            android:textSize="26sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:fontFamily="sans-serif-condensed"
+            android:padding="10dp"
+            />
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/google_sign_in_btn"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            >
+        </com.google.android.gms.common.SignInButton>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="OR"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"/>
+
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

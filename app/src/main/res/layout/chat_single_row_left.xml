@@ -4,6 +4,29 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/layout_chatUserProfileLeft"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="6dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/avatar_default"
+            android:id="@+id/chatUserProfileLeftSide"
+            android:layout_gravity="left"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Display Name"
+            android:id="@+id/chatUserDisplayNameLeft"
+            android:textSize="10sp"/>
+    </LinearLayout>
+
     <com.github.library.bubbleview.BubbleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +41,8 @@
         app:arrowCenter="true"
         app:bubbleColor="#8034F9"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginRight="8dp"
-        android:id="@+id/messageBubbleLeft"/>
+        android:id="@+id/messageBubbleLeft"
+        android:layout_toRightOf="@id/layout_chatUserProfileLeft"/>
 </RelativeLayout>

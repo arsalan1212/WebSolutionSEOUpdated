@@ -36,11 +36,14 @@ public class Chat {
 
             FirebaseUser mCurrentUser = mAuth.getCurrentUser();
             String Uid = mCurrentUser.getUid();
-
+            String displayName = mCurrentUser.getDisplayName();
+            String photoUrl = mCurrentUser.getPhotoUrl().toString();
 
             Map chatMap = new HashMap();
             chatMap.put("senderId",Uid);
             chatMap.put("message",message);
+            chatMap.put("displayName",displayName);
+            chatMap.put("photoUrl",photoUrl);
 
             Map RefMap = new HashMap();
             RefMap.put(mChatRef.push().getKey()+"/",chatMap);

@@ -29,6 +29,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
     private AdView adView;
     private InterstitialAd interstitialAd;
     private String videoId,VideoTitle;
+
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
 
         //setting interstitial Ad
         setInterstitialAd();
+
+
+        mAuth = FirebaseAuth.getInstance();
 
         //---------------- ************************** ---------------------
         tv_connectionStatus= (TextView) findViewById(R.id.tv_display_Connection_status);
@@ -86,6 +93,23 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
         GetResponse();
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser mCurrentUser = mAuth.getCurrentUser();
+        //User is not Login
+        if(mCurrentUser== null){
+
+            Intent signInIntent = new Intent(MainActivity.this,SignInActivity.class);
+            signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(signInIntent);
+            finish();
+        }
+
+    }
+
     //getting the response
     private void GetResponse() {
 

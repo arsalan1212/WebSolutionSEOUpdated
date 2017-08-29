@@ -8,16 +8,18 @@ public class Messages {
 
     private String senderId;
     private String message;
-    private String isTyping;
+    private String displayName;
+    private String photoUrl;
 
     public Messages(){
 
     }
 
-    public Messages(String userId, String message,String isTyping) {
+    public Messages(String userId, String message,String displayName,String photoUrl) {
         this.senderId = userId;
         this.message = message;
-        this.isTyping = isTyping;
+        this.displayName = displayName;
+        this.photoUrl = photoUrl;
     }
 
     public String getSenderId() {
@@ -36,11 +38,19 @@ public class Messages {
         this.message = message;
     }
 
-    public String isTyping() {
-        return isTyping;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setTyping(String typing) {
-        isTyping = typing;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

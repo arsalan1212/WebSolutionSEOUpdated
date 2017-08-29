@@ -1,16 +1,21 @@
 package com.example.arsalankhan.websolutionseo.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.arsalankhan.websolutionseo.R;
 import com.example.arsalankhan.websolutionseo.helper.Messages;
 import com.github.library.bubbleview.BubbleTextView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Arsalan khan on 8/27/2017.
@@ -23,10 +28,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     FirebaseAuth mAuth;
 
     ArrayList<Messages> messagesArrayList =new ArrayList<>();
-
-    public ChatAdapter(ArrayList arrayList){
+    private Context context;
+    public ChatAdapter(ArrayList arrayList,Context context){
         messagesArrayList = arrayList;
         mAuth = FirebaseAuth.getInstance();
+        this.context = context;
 
     }
 
@@ -74,11 +80,23 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             MyViewHolderLeftBubble holderLeftBubble = (MyViewHolderLeftBubble) holder;
             holderLeftBubble.bubbleTextViewLeft.setText(messages.getMessage());
+            holderLeftBubble.chatUserNameLeftSide.setText(messages.getDisplayName());
+
+            Picasso.with(context).load(messages.getPhotoUrl()).placeholder(R.drawable.avatar_default)
+                        .into(holderLeftBubble.chatUserProfileLeftSideImage);
+
         }
+
         else if(holder instanceof MyViewHolderRightBubble) {
 
             MyViewHolderRightBubble holderRightBubble = (MyViewHolderRightBubble) holder;
             holderRightBubble.bubbleTextViewRight.setText(messages.getMessage());
+
+            holderRightBubble.chatUserNameRightSide.setText(messages.getDisplayName());
+
+
+            Picasso.with(context).load(messages.getPhotoUrl()).placeholder(R.drawable.avatar_default)
+                        .into(holderRightBubble.UserProfileRightSideImage);
 
         }
 
@@ -92,20 +110,28 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class MyViewHolderLeftBubble extends RecyclerView.ViewHolder{
 
         BubbleTextView bubbleTextViewLeft;
+        CircleImageView chatUserProfileLeftSideImage;
+        TextView chatUserNameLeftSide;
         public MyViewHolderLeftBubble(View itemView) {
             super(itemView);
 
             bubbleTextViewLeft =itemView.findViewById(R.id.messageBubbleLeft);
+            chatUserProfileLeftSideImage = itemView.findViewById(R.id.chatUserProfileLeftSide);
+            chatUserNameLeftSide = itemView.findViewById(R.id.chatUserDisplayNameLeft);
         }
     }
 
     public class MyViewHolderRightBubble extends RecyclerView.ViewHolder{
 
         BubbleTextView bubbleTextViewRight;
+        CircleImageView UserProfileRightSideImage;
+        TextView chatUserNameRightSide;
         public MyViewHolderRightBubble(View itemView) {
             super(itemView);
 
             bubbleTextViewRight = itemView.findViewById(R.id.messageBubbleRight);
+            UserProfileRightSideImage = itemView.findViewById(R.id.chatUserProfileRightSide);
+            chatUserNameRightSide = itemView.findViewById(R.id.chatUserDisplayNameRight);
         }
     }
 

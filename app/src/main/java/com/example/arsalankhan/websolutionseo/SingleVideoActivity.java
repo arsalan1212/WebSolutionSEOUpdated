@@ -1,9 +1,7 @@
 package com.example.arsalankhan.websolutionseo;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -15,7 +13,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,32 +24,14 @@ import com.example.arsalankhan.websolutionseo.Adapter.ChatAdapter;
 import com.example.arsalankhan.websolutionseo.helper.Messages;
 import com.example.arsalankhan.websolutionseo.helper.TotalViewsHelper;
 import com.example.arsalankhan.websolutionseo.helper.TyperIndicator;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,18 +54,12 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private TextView tv_videoTitle,tv_likes,tv_dislikes,tv_views;
     private LinearLayout allViewsLayout;
     private ProgressBar mProgress;
-    private SignInButton mGoogleButton;
     private RecyclerView mChatRecyclerView;
     private ChatAdapter chatAdapter;
     private ArrayList<Messages> messagesArrayList = new ArrayList<>();
 
     private ArrayList<TotalViewsHelper> arraylist_TotalViews=new ArrayList<>();
     private FirebaseAuth mAuth;
-    private CallbackManager mCallbackManager;
-    private String TAG="Facebook";
-    private static final int RC_SIGN_IN=1;
-    private GoogleApiClient mGoogleApiClient;
-    private ProgressDialog mProgressDialog;
     private EditText editTextMessage;
     private String mCurrentUserId;
     private String msenderId;
@@ -105,7 +78,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         setContentView(R.layout.activity_single_video);
 
 
-        mTyperDatabase = FirebaseDatabase.getInstance().getReference().child("TyperIndicator");
+        mTyperDatabase = FirebaseDatabase.getInstance().getReference().child("TypingIndicator");
 
         mYoutubePlayerView = findViewById(R.id.youtubeplayerView);
         mYoutubePlayerView.initialize(MainActivity.DeveloperKey,this);
@@ -116,7 +89,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
 
         // initializing the Adapter
-        chatAdapter = new ChatAdapter(messagesArrayList);
+        chatAdapter = new ChatAdapter(messagesArrayList,SingleVideoActivity.this);
         mChatRecyclerView.setAdapter(chatAdapter);
 
 
@@ -130,33 +103,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
         // Getting total views, likes and dislikes
         getViewsResponse();
-
-        //Facebook login
-        FacebookLogin();
-
-        //For google SignIn
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                          .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                          .build();
-
-        mGoogleButton = findViewById(R.id.google_sign_in_btn);
-        mGoogleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-
-
-            }
-        });
-
-        // Google SignIn End
-
 
         //load messages into recyclerView
         loadMessages();
@@ -180,11 +126,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         mChatRecyclerView = findViewById(R.id.chatRecyclerView);
         mChatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mChatRecyclerView.setHasFixedSize(true);
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setTitle("Sign In");
-        mProgressDialog.setMessage("Please wait while we setup your Account");
 
         editTextMessage = findViewById(R.id.ChateditText);
 
@@ -233,7 +174,16 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     protected void onStart() {
         super.onStart();
 
-        CheckCurrentUserStatus();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mcurrentUser = mAuth.getCurrentUser();
+        mCurrentUserId = mcurrentUser.getUid();
+
+
+        //creating node for current in order to detect its typing
+        Map typerMap = new HashMap();
+        typerMap.put("isTyping","false");
+        typerMap.put("senderId",mCurrentUserId);
+        mTyperDatabase.child(mCurrentUserId).updateChildren(typerMap);
 
     }
 //checking isUser is Typing or not
@@ -254,12 +204,12 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
                         if(isTyping.equals("true")){
 
-                            showOrHideTypeIndicatorLayout(true);
+                            showAndHideTypeIndicatorLayout(true);
 
                         }
                         else{
 
-                            showOrHideTypeIndicatorLayout(false);
+                            showAndHideTypeIndicatorLayout(false);
                         }
                     }
                 }
@@ -273,7 +223,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     }
 
-    private void showOrHideTypeIndicatorLayout(boolean isTyping){
+    private void showAndHideTypeIndicatorLayout(boolean isTyping){
         LinearLayout layout_typeIndicator = findViewById(R.id.layout_type_indicator);
 
         if(isTyping){
@@ -282,41 +232,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         else{
          layout_typeIndicator.setVisibility(View.GONE);
         }
-
-    }
-    //Checking the user is login or not
-    private void CheckCurrentUserStatus() {
-        LinearLayout layout_signIn = findViewById(R.id.layout_SignUp);
-
-        RelativeLayout layout_chat = findViewById(R.id.layout_chat);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        if(mAuth != null){
-
-            FirebaseUser mcurrentUser = mAuth.getCurrentUser();
-
-            if(mcurrentUser==null){
-                //  User is Not login
-                layout_signIn.setVisibility(View.VISIBLE);
-                layout_chat.setVisibility(View.GONE);
-            }
-            else
-            {
-                //User is login
-                layout_signIn.setVisibility(View.GONE);
-                layout_chat.setVisibility(View.VISIBLE);
-
-                mCurrentUserId = mcurrentUser.getUid();
-
-                Map typerMap = new HashMap();
-                typerMap.put("isTyping","false");
-                typerMap.put("senderId",mCurrentUserId);
-                mTyperDatabase.child(mCurrentUserId).updateChildren(typerMap);
-            }
-
-        }
-
 
     }
 
@@ -470,128 +385,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     }
 
 
-    //For Google
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            //Update UI if user is login or not
-                            CheckCurrentUserStatus();
-                            //load messages into recyclerView
-                            loadMessages();
-
-                            mProgressDialog.dismiss();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(SingleVideoActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-    }
-
-    //--------------- ********************************** ------------------------------
-    // For FaceBook login
-    private void FacebookLogin(){
-        // Initialize Facebook Login button
-        mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-
-                mProgressDialog.show();
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                // ...
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //For Facebook Login
-        // Pass the activity result back to the Facebook SDK
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
-        //________________ **************************** ______________________________
-        //For Google SignIn
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                // Google Sign In was successful, authenticate with Firebase
-                mProgressDialog.show();
-
-                GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthWithGoogle(account);
-            } else {
-                // Google Sign In failed, update UI appropriately
-                // ...
-                Toast.makeText(this, "SignIn Failed onActivityResult", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            //Update UI if user is login or not
-                            CheckCurrentUserStatus();
-                            //load messages into recyclerView
-                            loadMessages();
-
-                            mProgressDialog.dismiss();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            Toast.makeText(SingleVideoActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-    }
-
-    // facebook code end here.......
 
     @Override
     protected void onDestroy() {
