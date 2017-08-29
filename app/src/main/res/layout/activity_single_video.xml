@@ -177,11 +177,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/chatRecyclerView"
-            android:layout_above="@+id/layout_chat_input">
+            android:layout_above="@+id/layout_chat_input"
+            android:layout_marginBottom="10dp">
         </android.support.v7.widget.RecyclerView>
 
 
-        <!-- Layout for chat input -->
+        <!-- Layout for chat input and type indicator-->
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -189,25 +190,45 @@
     android:orientation="vertical"
     android:layout_alignParentBottom="true"
     >
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi"
-        style="@style/AVLoadingIndicatorView"
-        android:layout_width="70dp"
-        android:layout_height="45dp"
-        android:visibility="visible"
-        app:indicatorColor="#FF4f4f4f"
-        app:indicatorName="BallBeatIndicator"
-        android:background="@drawable/type_indicator_bg"
+
+    <!-- For type indicator textview along with indicator-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-       android:layout_marginLeft="10dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="8dp"
-        />
+        android:background="@drawable/type_indicator_bg"
+       android:gravity="center"
+        android:id="@+id/layout_type_indicator"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SomeOne is typing"/>
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/avi"
+            style="@style/AVLoadingIndicatorView"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:visibility="visible"
+            app:indicatorColor="#FF4f4f4f"
+            app:indicatorName="BallBeatIndicator"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="4dp"
 
 
+            />
+    </LinearLayout>
+
+
+    <!-- Chat input Layout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

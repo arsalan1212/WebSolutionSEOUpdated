@@ -199,28 +199,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-               /* mChatDatabaseRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-
-                            Messages messages = dataSnapshot1.getValue(Messages.class);
-                            msenderId = messages.getSenderId();
-
-                            if(msenderId.equals(mCurrentUserId)){
-                                messageKey = dataSnapshot1.getKey();
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-*/
-
                 if(!TextUtils.isEmpty(charSequence) && charSequence.length() > 0){
 
                     mTyperDatabase.child(mCurrentUserId).child("isTyping").setValue("true");
@@ -233,6 +211,20 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+        //when Focus on EditText change also check editText isEmpty or not so that update isTyping value in database
+        editTextMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                EditText editTextMsg = (EditText) view;
+
+                if(b && editTextMsg.length() > 0){
+                    mTyperDatabase.child(mCurrentUserId).child("isTyping").setValue("true");
+                }else{
+                    mTyperDatabase.child(mCurrentUserId).child("isTyping").setValue("false");
+                }
             }
         });
 
@@ -261,10 +253,13 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
                         String isTyping = typer.getIsTyping();
 
                         if(isTyping.equals("true")){
-                            Log.d("TAG","Someone is Typing");
+
+                            showOrHideTypeIndicatorLayout(true);
+
                         }
                         else{
-                            Log.d("TAG","Typing is stop");
+
+                            showOrHideTypeIndicatorLayout(false);
                         }
                     }
                 }
@@ -278,6 +273,17 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     }
 
+    private void showOrHideTypeIndicatorLayout(boolean isTyping){
+        LinearLayout layout_typeIndicator = findViewById(R.id.layout_type_indicator);
+
+        if(isTyping){
+            layout_typeIndicator.setVisibility(View.VISIBLE);
+        }
+        else{
+         layout_typeIndicator.setVisibility(View.GONE);
+        }
+
+    }
     //Checking the user is login or not
     private void CheckCurrentUserStatus() {
         LinearLayout layout_signIn = findViewById(R.id.layout_SignUp);
