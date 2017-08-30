@@ -4,6 +4,9 @@
     <string name="websolutionseo">WebSolutionSEO</string>
     <string name="tv_loading">Loading...</string>
     <string name="join_chat_group">Sign In With</string>
+    <string name="open_drawer">open</string>
+    <string name="close_drawer">close</string>
+
 
     <!-- for facebook login-->
     <string name="facebook_app_id">496071707404080</string>
@@ -13,8 +16,9 @@
 
     <!-- For Admob -->
     <string name="Admob_App_id">ca-app-pub-1775023839671556~4963841595</string>
-    <string name="banner_unit_id">ca-app-pub-1775023839671556/9427143868</string>
-    <string name="Interstitial_unit_id">ca-app-pub-1775023839671556/7990116722</string>
+    <string name="banner_unit_id">ca-app-pub-3054973067184046/7788758635</string>
+    <string name="Interstitial_unit_id">ca-app-pub-3054973067184046/1933796721</string>
+
 
 
 </resources>

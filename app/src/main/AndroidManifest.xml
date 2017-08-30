@@ -59,7 +59,10 @@
 
         <service
             android:name=".InterstitialAdService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".NavigtionViewItems.Market_summary_activity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

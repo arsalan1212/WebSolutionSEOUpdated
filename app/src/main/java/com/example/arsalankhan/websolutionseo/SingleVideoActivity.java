@@ -1,5 +1,6 @@
 package com.example.arsalankhan.websolutionseo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,20 +10,13 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.arsalankhan.websolutionseo.Adapter.ChatAdapter;
 import com.example.arsalankhan.websolutionseo.helper.Messages;
-import com.example.arsalankhan.websolutionseo.helper.TotalViewsHelper;
 import com.example.arsalankhan.websolutionseo.helper.TyperIndicator;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -43,10 +37,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,14 +45,10 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     private YouTubePlayerView mYoutubePlayerView;
     private String videoId;
-    private TextView tv_videoTitle,tv_likes,tv_dislikes,tv_views;
-    private LinearLayout allViewsLayout;
-    private ProgressBar mProgress;
     private RecyclerView mChatRecyclerView;
     private ChatAdapter chatAdapter;
     private ArrayList<Messages> messagesArrayList = new ArrayList<>();
 
-    private ArrayList<TotalViewsHelper> arraylist_TotalViews=new ArrayList<>();
     private FirebaseAuth mAuth;
     private EditText editTextMessage;
     private String mCurrentUserId;
@@ -79,7 +65,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         AppEventsLogger.activateApp(this);
 
         //for moving the activity up due keyboard overlay with editText
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+       // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setContentView(R.layout.activity_single_video);
 
@@ -87,12 +73,12 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
         //For Interstitial Ad
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(getString(R.string.Interstitial_unit_id));
         interstitialAd.loadAd(new AdRequest.Builder().build());
 
 
         //For Banner Ads
-        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this,getString(R.string.Admob_App_id));
         adView = findViewById(R.id.singleVideo_adView);
         adView.loadAd(new AdRequest.Builder().build());
 
@@ -117,12 +103,7 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         Intent intent=getIntent();
         if(intent!=null){
             videoId = intent.getStringExtra("videoId");
-            String videoTitle=intent.getStringExtra("videoTitle");
-            tv_videoTitle.setText(videoTitle);
         }
-
-        // Getting total views, likes and dislikes
-        getViewsResponse();
 
         //load messages into recyclerView
         loadMessages();
@@ -137,14 +118,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
 
     private void initActivityViews() {
-
-        tv_videoTitle=findViewById(R.id.singleVideoTitle);
-        tv_views= findViewById(R.id.videoViews);
-        tv_likes=findViewById(R.id.tv_likes);
-        tv_dislikes=findViewById(R.id.tv_unlikes);
-        allViewsLayout= findViewById(R.id.layout_singleVideoAllViews);
-
-        mProgress=findViewById(R.id.commentsSection_progress);
 
         mChatRecyclerView = findViewById(R.id.chatRecyclerView);
         mChatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -283,6 +256,11 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
             editTextMessage.setText("");
 
 
+            //hiding the keyboard
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+
         }
         else{
             Toast.makeText(this, "Please write some Message", Toast.LENGTH_SHORT).show();
@@ -346,71 +324,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         }
         else{
             Toast.makeText(this, "There is some Error occur while Player Initialization", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    //VIEWS, LIKES, DISLIKES AND TOTAL COMMENTS RESPONSE
-    private void getViewsResponse(){
-        String url= "https://www.googleapis.com/youtube/v3/videos?part=statistics&id="+videoId+"&key="+MainActivity.DeveloperKey;
-
-        StringRequest request= new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                allViewsLayout.setVisibility(View.VISIBLE);
-                mProgress.setVisibility(View.GONE);
-                if(response!=null){
-
-                    try {
-
-                        JSONObject parentJsonObject= new JSONObject(response.toString());
-                        JSONArray parentJsonArray= parentJsonObject.getJSONArray("items");
-
-                        JSONObject jsonObject =parentJsonArray.getJSONObject(0);
-                        JSONObject childJsonObject=jsonObject.getJSONObject("statistics");
-
-                        String totalviews = childJsonObject.getString("viewCount");
-                        String totalLikes = childJsonObject.getString("likeCount");
-                        String totalDislikes = childJsonObject.getString("dislikeCount");
-                        String commentCount =  childJsonObject.getString("commentCount");
-
-
-                        TotalViewsHelper helper = new TotalViewsHelper(totalviews,totalLikes,totalDislikes,commentCount);
-                        arraylist_TotalViews.add(helper);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d("TAG","Error: "+e.toString());
-                    }
-
-                }
-                SetAllViewsData();
-            }
-
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                allViewsLayout.setVisibility(View.GONE);
-                mProgress.setVisibility(View.GONE);
-            }
-        });
-
-        MySingleton.getInstance(SingleVideoActivity.this).addToRequestQueue(request);
-
-    }
-
-    //setting views data i.e. likes, dislikes etc
-    private void SetAllViewsData() {
-
-        if(arraylist_TotalViews.size()!=0){
-
-            TotalViewsHelper helper= arraylist_TotalViews.get(0);
-
-            tv_views.setText(helper.getTotalViews()+" views");
-            tv_likes.setText(helper.getTotalLiskes());
-            tv_dislikes.setText(helper.getTotlaDislikes());
         }
     }
 

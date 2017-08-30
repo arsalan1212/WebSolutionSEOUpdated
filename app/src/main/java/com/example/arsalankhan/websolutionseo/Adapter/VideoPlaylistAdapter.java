@@ -96,15 +96,8 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
                 public void onClick(View view) {
 
                     String VideoId=videoPlaylistArraylist.get(getAdapterPosition()).getVideoId();
-                    String videoTitle = videoPlaylistArraylist.get(getAdapterPosition()).getTitle();
-      /*              Intent singleVideoIntent=new Intent(context, SingleVideoActivity.class);
 
-                    singleVideoIntent.putExtra("videoId",VideoId);
-                    singleVideoIntent.putExtra("videoTitle",videoPlaylistArraylist.get(getAdapterPosition()).getTitle());
-                    singleVideoIntent.putExtra("channelTitle",videoPlaylistArraylist.get(getAdapterPosition()).getChannelTitle());
-                    context.startActivity(singleVideoIntent);*/
-
-                    mcommunicator.setMessage(VideoId,videoTitle);
+                    mcommunicator.setMessage(VideoId);
                 }
             });
         }
@@ -113,7 +106,7 @@ public class VideoPlaylistAdapter extends RecyclerView.Adapter<VideoPlaylistAdap
 
    public interface Communicator{
 
-         void setMessage(String videoId,String VideoTitle);
+         void setMessage(String videoId);
     }
 }
 

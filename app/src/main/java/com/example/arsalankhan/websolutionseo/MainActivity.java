@@ -2,11 +2,17 @@ package com.example.arsalankhan.websolutionseo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,6 +29,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.arsalankhan.websolutionseo.Adapter.VideoPlaylistAdapter;
+import com.example.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
 import com.example.arsalankhan.websolutionseo.helper.PlaylistHelper;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -38,7 +45,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements VideoPlaylistAdapter.Communicator{
+public class MainActivity extends AppCompatActivity implements VideoPlaylistAdapter.Communicator,
+        NavigationView.OnNavigationItemSelectedListener{
 
     private static final String channelId="UCBRBgsoUC893QzkPRsdx8GQ";
     private static final String MaxResult="50";
@@ -55,16 +63,16 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
     private ArrayList<PlaylistHelper> playlistVideoArraylist=new ArrayList<>();
     private AdView adView;
     private InterstitialAd interstitialAd;
-    private String videoId,VideoTitle;
-
+    private String videoId;
     private FirebaseAuth mAuth;
+    private DrawerLayout mDrawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //For Banner Ads
-        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this,getString(R.string.Admob_App_id));
         adView = (AdView) findViewById(R.id.main_adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
@@ -92,6 +100,43 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
         //Get Response from Server
         GetResponse();
 
+
+        //setting DrawerLayout
+        setUpNavigationDrawer();
+
+    }
+
+    private void setUpNavigationDrawer() {
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView.bringToFront();
+
+        navigationView.setNavigationItemSelectedListener(this);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+          this,
+                mDrawerLayout,
+                mToolbar,
+                R.string.open_drawer,
+                R.string.close_drawer
+        );
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+    }
+
+    private void CloseDrawer(){
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START))
+            CloseDrawer();
+        else
+
+        super.onBackPressed();
     }
 
     @Override
@@ -217,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
 
         //For Interstitial Ad
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(getString(R.string.Interstitial_unit_id));
         interstitialAd.loadAd(new AdRequest.Builder().build());
 
         interstitialAd.setAdListener(new AdListener() {
@@ -227,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
                 interstitialAd.loadAd(new AdRequest.Builder().build());
                 Intent singleVideoIntent = new Intent(MainActivity.this,SingleVideoActivity.class);
                 singleVideoIntent.putExtra("videoId",videoId);
-                singleVideoIntent.putExtra("videoTitle",VideoTitle);
                 startActivity(singleVideoIntent);
 
             }
@@ -237,10 +281,9 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
 
     }
     @Override
-    public void setMessage(String videoId, String VideoTitle) {
+    public void setMessage(String videoId) {
 
         this.videoId = videoId;
-        this.VideoTitle = VideoTitle;
 
         if(interstitialAd.isLoaded()){
             interstitialAd.show();
@@ -250,8 +293,20 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
             {
                 Intent singleVideoIntent=new Intent(this, SingleVideoActivity.class);
                 singleVideoIntent.putExtra("videoId",videoId);
-                singleVideoIntent.putExtra("videoTitle",VideoTitle);
                 startActivity(singleVideoIntent);
             }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        CloseDrawer();
+        switch (item.getItemId()){
+            case R.id.market_summary:
+                Intent intent = new Intent(MainActivity.this, Market_summary_activity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 }
