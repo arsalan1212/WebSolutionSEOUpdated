@@ -7,22 +7,13 @@
     android:background="@color/background_color"
     tools:context="com.example.arsalankhan.websolutionseo.SingleVideoActivity">
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/singleVideo_adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        android:layout_marginBottom="1dp">
-    </com.google.android.gms.ads.AdView>
+
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtubeplayerView"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:layout_below="@id/singleVideo_adView"></com.google.android.youtube.player.YouTubePlayerView>
+        android:layout_height="190dp">
+    </com.google.android.youtube.player.YouTubePlayerView>
     <TextView
         android:id="@+id/singleVideoTitle"
         android:layout_width="match_parent"
@@ -49,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/singleVideoTitle"
             android:orientation="vertical"
-            android:visibility="gone"
+
             >
             <LinearLayout
                 android:id="@+id/layout_comments"
@@ -118,6 +109,17 @@
                 android:background="#E2E2E2"
                />
             />
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/singleVideo_adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                ads:adSize="SMART_BANNER"
+                ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+                android:layout_marginBottom="1dp"
+                >
+            </com.google.android.gms.ads.AdView>
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
