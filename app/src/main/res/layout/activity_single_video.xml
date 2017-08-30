@@ -4,23 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background_color"
     tools:context="com.example.arsalankhan.websolutionseo.SingleVideoActivity">
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/singleVideo_adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        android:layout_marginBottom="1dp">
+    </com.google.android.gms.ads.AdView>
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtubeplayerView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"></com.google.android.youtube.player.YouTubePlayerView>
+        android:layout_height="190dp"
+        android:layout_below="@id/singleVideo_adView"></com.google.android.youtube.player.YouTubePlayerView>
     <TextView
         android:id="@+id/singleVideoTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:text="Video Title"
         android:textColor="?android:attr/textColorPrimaryDisableOnly"
         android:textSize="18sp"
         android:layout_below="@id/youtubeplayerView"/>
+
     <LinearLayout
         android:id="@+id/allViewParentLayout"
         android:layout_width="match_parent"
@@ -28,7 +42,7 @@
         android:layout_below="@id/singleVideoTitle"
         android:orientation="vertical"
         >
-
+        <!-- For likes, dislikes and total views layout-->
         <LinearLayout
             android:id="@+id/layout_singleVideoAllViews"
             android:layout_width="match_parent"
@@ -44,7 +58,7 @@
                 android:layout_below="@id/singleVideoTitle"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp">
 
@@ -102,7 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#E2E2E2"
-                android:layout_marginBottom="5dp"/>
+               />
             />
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -121,7 +135,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/allViewParentLayout"
         android:id="@+id/layout_chat"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
 
         >
         <android.support.v7.widget.RecyclerView

@@ -53,9 +53,13 @@
 
         <service
             android:name=".MyNotificationAlertIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
-        <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".SignInActivity" />
+
+        <service
+            android:name=".InterstitialAdService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

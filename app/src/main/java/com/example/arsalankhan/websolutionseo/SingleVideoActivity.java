@@ -26,6 +26,10 @@ import com.example.arsalankhan.websolutionseo.helper.TotalViewsHelper;
 import com.example.arsalankhan.websolutionseo.helper.TyperIndicator;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -64,6 +68,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private String mCurrentUserId;
     private String msenderId;
     private DatabaseReference mTyperDatabase;
+    private static InterstitialAd interstitialAd;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,20 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setContentView(R.layout.activity_single_video);
+
+
+
+        //For Interstitial Ad
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
+
+        //For Banner Ads
+        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        adView = findViewById(R.id.singleVideo_adView);
+        adView.loadAd(new AdRequest.Builder().build());
+
 
 
         mTyperDatabase = FirebaseDatabase.getInstance().getReference().child("TypingIndicator");
@@ -110,6 +130,9 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
         //checking someone is Typing or not
         isUserTyping();
+
+        //starting the service for Ad
+        startService(new Intent(SingleVideoActivity.this, InterstitialAdService.class));
     }
 
 
@@ -185,6 +208,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         typerMap.put("senderId",mCurrentUserId);
         mTyperDatabase.child(mCurrentUserId).updateChildren(typerMap);
 
+
+
     }
 //checking isUser is Typing or not
     private void isUserTyping(){
@@ -235,6 +260,11 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
 
     }
 
+    public static void showInterstitialAd(){
+        if (interstitialAd.isLoaded()){
+            interstitialAd.show();
+        }
+    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -384,11 +414,10 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         }
     }
 
-
-
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         stopService(new Intent(SingleVideoActivity.this,MyNotificationAlertIntentService.class));
+        stopService(new Intent(SingleVideoActivity.this,InterstitialAdService.class));
     }
 }

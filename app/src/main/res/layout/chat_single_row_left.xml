@@ -13,25 +13,21 @@
         android:layout_marginLeft="6dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/avatar_default"
             android:id="@+id/chatUserProfileLeftSide"
             android:layout_gravity="left"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Display Name"
-            android:id="@+id/chatUserDisplayNameLeft"
-            android:textSize="10sp"/>
     </LinearLayout>
 
     <com.github.library.bubbleview.BubbleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello BubbleTextVew"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:textColor="@android:color/white"
         app:arrowWidth="8dp"
         app:angle="8dp"
@@ -41,7 +37,7 @@
         app:arrowCenter="true"
         app:bubbleColor="#8034F9"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginRight="8dp"
         android:id="@+id/messageBubbleLeft"
         android:layout_toRightOf="@id/layout_chatUserProfileLeft"/>

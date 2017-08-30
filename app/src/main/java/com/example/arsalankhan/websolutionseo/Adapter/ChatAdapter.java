@@ -1,11 +1,15 @@
 package com.example.arsalankhan.websolutionseo.Adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.arsalankhan.websolutionseo.R;
 import com.example.arsalankhan.websolutionseo.helper.Messages;
@@ -76,11 +80,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         Messages messages = messagesArrayList.get(position);
 
+        String msg = messages.getMessage();
+        String displayName = messages.getDisplayName();
+        String totalString =  displayName+"\n"+msg;
+
+        Spannable spanText = new SpannableString(totalString);
+        spanText.setSpan(new RelativeSizeSpan(.6f),0,displayName.length(), 0);
+        spanText.setSpan(new StyleSpan(Typeface.ITALIC),0,displayName.length(),0);
         if(holder instanceof MyViewHolderLeftBubble){
 
             MyViewHolderLeftBubble holderLeftBubble = (MyViewHolderLeftBubble) holder;
-            holderLeftBubble.bubbleTextViewLeft.setText(messages.getMessage());
-            holderLeftBubble.chatUserNameLeftSide.setText(messages.getDisplayName());
+//            holderLeftBubble.bubbleTextViewLeft.setText(messages.getDisplayName()+"\n"+messages.getMessage());
+            holderLeftBubble.bubbleTextViewLeft.setText(spanText);
 
             Picasso.with(context).load(messages.getPhotoUrl()).placeholder(R.drawable.avatar_default)
                         .into(holderLeftBubble.chatUserProfileLeftSideImage);
@@ -90,9 +101,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         else if(holder instanceof MyViewHolderRightBubble) {
 
             MyViewHolderRightBubble holderRightBubble = (MyViewHolderRightBubble) holder;
-            holderRightBubble.bubbleTextViewRight.setText(messages.getMessage());
-
-            holderRightBubble.chatUserNameRightSide.setText(messages.getDisplayName());
+           // holderRightBubble.bubbleTextViewRight.setText(messages.getDisplayName()+"\n"+messages.getMessage());
+            holderRightBubble.bubbleTextViewRight.setText(spanText);
 
 
             Picasso.with(context).load(messages.getPhotoUrl()).placeholder(R.drawable.avatar_default)
@@ -111,13 +121,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         BubbleTextView bubbleTextViewLeft;
         CircleImageView chatUserProfileLeftSideImage;
-        TextView chatUserNameLeftSide;
+
         public MyViewHolderLeftBubble(View itemView) {
             super(itemView);
 
             bubbleTextViewLeft =itemView.findViewById(R.id.messageBubbleLeft);
             chatUserProfileLeftSideImage = itemView.findViewById(R.id.chatUserProfileLeftSide);
-            chatUserNameLeftSide = itemView.findViewById(R.id.chatUserDisplayNameLeft);
         }
     }
 
@@ -125,13 +134,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         BubbleTextView bubbleTextViewRight;
         CircleImageView UserProfileRightSideImage;
-        TextView chatUserNameRightSide;
+
         public MyViewHolderRightBubble(View itemView) {
             super(itemView);
 
             bubbleTextViewRight = itemView.findViewById(R.id.messageBubbleRight);
             UserProfileRightSideImage = itemView.findViewById(R.id.chatUserProfileRightSide);
-            chatUserNameRightSide = itemView.findViewById(R.id.chatUserDisplayNameRight);
         }
     }
 
