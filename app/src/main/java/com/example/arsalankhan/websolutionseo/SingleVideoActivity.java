@@ -56,6 +56,8 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     private DatabaseReference mTyperDatabase;
     private static InterstitialAd interstitialAd;
     private AdView adView;
+    public static final String SINGLE_VIDEO_ACTIVITY_NAME ="Single_Video";
+    private Intent intentService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,9 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
         isUserTyping();
 
         //starting the service for Ad
-        startService(new Intent(SingleVideoActivity.this, InterstitialAdService.class));
+        intentService = new Intent(SingleVideoActivity.this, InterstitialAdService.class);
+        intentService.putExtra("single_video",SINGLE_VIDEO_ACTIVITY_NAME);
+        startService(intentService);
     }
 
 
@@ -331,6 +335,6 @@ public class SingleVideoActivity extends YouTubeBaseActivity implements YouTubeP
     protected void onStop() {
         super.onStop();
         stopService(new Intent(SingleVideoActivity.this,MyNotificationAlertIntentService.class));
-        stopService(new Intent(SingleVideoActivity.this,InterstitialAdService.class));
+        stopService(intentService);
     }
 }

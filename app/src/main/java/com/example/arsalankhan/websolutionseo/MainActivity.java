@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
     private String videoId;
     private FirebaseAuth mAuth;
     private DrawerLayout mDrawerLayout;
+    private static InterstitialAd myInterstitialAd;
+    private Intent intentService;
+    public static final String MAIN_ACTIVITY_NAME="activity_main";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
 
         //setting interstitial Ad
         setInterstitialAd();
-
+        setUpInterstitialAd();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -103,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
 
         //setting DrawerLayout
         setUpNavigationDrawer();
+
+
+        //starting interstitial ad service
+        intentService = new Intent(MainActivity.this,InterstitialAdService.class);
+        intentService.putExtra("activity_main",MAIN_ACTIVITY_NAME);
+        startService(intentService);
 
     }
 
@@ -153,6 +162,12 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
             finish();
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopService(intentService);
     }
 
     //getting the response
@@ -277,8 +292,6 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
             }
         });
 
-
-
     }
     @Override
     public void setMessage(String videoId) {
@@ -308,5 +321,20 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
                 break;
         }
         return true;
+    }
+
+
+    private void setUpInterstitialAd(){
+        //For Interstitial Ad
+        myInterstitialAd = new InterstitialAd(this);
+        myInterstitialAd.setAdUnitId(getString(R.string.Interstitial_unit_id));
+        myInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+    }
+
+    public static void showInterstitialAd(){
+        if(myInterstitialAd.isLoaded()){
+            myInterstitialAd.show();
+        }
     }
 }
