@@ -8,23 +8,16 @@
     tools:context="com.example.arsalankhan.websolutionseo.SplashScreen">
 
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-        app:srcCompat="@drawable/app_logo" />
     <TextView
         android:id="@+id/tv_title"
-        android:layout_below="@id/app_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
        android:padding="10dp"
         android:gravity="center"
-        android:text="@string/psx_training"
+        android:text="PSX \n Training"
         android:textColor="#555"
-        android:textSize="25sp"
+        android:textSize="70sp"
+        android:layout_marginTop="90dp"
         android:textStyle="bold"
         android:fontFamily="sans-serif"/>
     <LinearLayout
@@ -34,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="50dp">
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
         style="@style/AVLoadingIndicatorView"

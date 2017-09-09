@@ -7,23 +7,13 @@
     tools:context="com.example.arsalankhan.websolutionseo.SignInActivity">
 
 
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/app_logo"
-    android:id="@+id/signin_applogo"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="90dp"/>
-
-
     <!--  Sign In Layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/layout_SignUp"
-        android:layout_below="@id/signin_applogo"
-        android:layout_marginTop="40dp"
+      android:layout_centerInParent="true"
         >
 
 
@@ -43,7 +33,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/google_sign_in_btn"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             >
         </com.google.android.gms.common.SignInButton>
 
