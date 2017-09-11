@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context="com.example.arsalankhan.websolutionseo.SignInActivity">
+    tools:context="com.websolutionseo.arsalankhan.websolutionseo.SignInActivity">
 
 
     <!--  Sign In Layout -->

@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo;
+package com.websolutionseo.arsalankhan.websolutionseo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +15,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.arsalankhan.websolutionseo.Adapter.ChatAdapter;
-import com.example.arsalankhan.websolutionseo.helper.Messages;
-import com.example.arsalankhan.websolutionseo.helper.TyperIndicator;
+import com.websolutionseo.arsalankhan.websolutionseo.Adapter.ChatAdapter;
+import com.websolutionseo.arsalankhan.websolutionseo.helper.Messages;
+import com.websolutionseo.arsalankhan.websolutionseo.helper.TyperIndicator;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.ads.AdRequest;

@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo;
+package com.websolutionseo.arsalankhan.websolutionseo;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,9 +28,9 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.arsalankhan.websolutionseo.Adapter.VideoPlaylistAdapter;
-import com.example.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
-import com.example.arsalankhan.websolutionseo.helper.PlaylistHelper;
+import com.websolutionseo.arsalankhan.websolutionseo.Adapter.VideoPlaylistAdapter;
+import com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
+import com.websolutionseo.arsalankhan.websolutionseo.helper.PlaylistHelper;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;

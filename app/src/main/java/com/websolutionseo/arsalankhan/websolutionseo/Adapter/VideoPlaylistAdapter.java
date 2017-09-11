@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo.Adapter;
+package com.websolutionseo.arsalankhan.websolutionseo.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.arsalankhan.websolutionseo.R;
-import com.example.arsalankhan.websolutionseo.helper.PlaylistHelper;
+import com.websolutionseo.arsalankhan.websolutionseo.R;
+import com.websolutionseo.arsalankhan.websolutionseo.helper.PlaylistHelper;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;

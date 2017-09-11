@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo;
+package com.websolutionseo.arsalankhan.websolutionseo;
 
 import org.junit.Test;
 

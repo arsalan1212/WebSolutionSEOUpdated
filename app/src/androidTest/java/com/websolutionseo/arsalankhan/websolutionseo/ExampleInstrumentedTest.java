@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo;
+package com.websolutionseo.arsalankhan.websolutionseo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.arsalankhan.websolutionseo", appContext.getPackageName());
+        assertEquals("com.com.arsalankhan.websolutionseo.arsalankhan.websolutionseo", appContext.getPackageName());
     }
 }

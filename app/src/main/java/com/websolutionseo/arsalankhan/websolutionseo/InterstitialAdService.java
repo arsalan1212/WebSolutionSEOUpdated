@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo;
+package com.websolutionseo.arsalankhan.websolutionseo;
 
 import android.app.Service;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
+import com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
 
 public class InterstitialAdService extends Service {
 

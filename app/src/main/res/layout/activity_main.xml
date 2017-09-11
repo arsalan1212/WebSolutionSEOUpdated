@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:background="@color/background_color"
         android:fitsSystemWindows="true"
-        tools:context="com.example.arsalankhan.websolutionseo.MainActivity">
+        tools:context="com.websolutionseo.arsalankhan.websolutionseo.MainActivity">
 
 
         <LinearLayout

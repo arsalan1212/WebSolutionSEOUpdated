@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity">
+    tools:context="com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity">
 
 
     <include layout="@layout/app_bar"

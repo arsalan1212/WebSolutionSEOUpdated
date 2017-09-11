@@ -9,8 +9,8 @@
 
 
     <!-- for facebook login-->
-    <string name="facebook_app_id">496071707404080</string>
-    <string name="fb_login_protocol_scheme">fb496071707404080</string>
+    <string name="facebook_app_id">263147637537431</string>
+    <string name="fb_login_protocol_scheme">fb263147637537431</string>
     <string name="enter_your_message">Enter your Message</string>
 
 

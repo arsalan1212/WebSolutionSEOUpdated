@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.arsalankhan.websolutionseo">
+    package="com.websolutionseo.arsalankhan.websolutionseo">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -35,15 +35,15 @@
         </activity>
 
         <!-- other Activities -->
-        <activity android:name=".MainActivity">
+        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".SingleVideoActivity" />
-        <activity android:name=".SplashScreen">
+        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.SingleVideoActivity" />
+        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,17 +52,17 @@
         </activity>
 
         <service
-            android:name=".MyNotificationAlertIntentService"
+            android:name="com.websolutionseo.arsalankhan.websolutionseo.MyNotificationAlertIntentService"
             android:exported="false" />
 
-        <activity android:name=".SignInActivity" />
+        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.SignInActivity" />
 
         <service
-            android:name=".InterstitialAdService"
+            android:name="com.websolutionseo.arsalankhan.websolutionseo.InterstitialAdService"
             android:exported="false" />
 
-        <activity android:name=".NavigtionViewItems.Market_summary_activity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity"
+            android:parentActivityName="com.websolutionseo.arsalankhan.websolutionseo.MainActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo.helper;
+package com.websolutionseo.arsalankhan.websolutionseo.helper;
 
 /**
  * Created by Arsalan khan on 8/29/2017.

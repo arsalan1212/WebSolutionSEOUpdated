@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo.Adapter;
+package com.websolutionseo.arsalankhan.websolutionseo.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.arsalankhan.websolutionseo.R;
-import com.example.arsalankhan.websolutionseo.helper.Messages;
+import com.websolutionseo.arsalankhan.websolutionseo.R;
+import com.websolutionseo.arsalankhan.websolutionseo.helper.Messages;
 import com.github.library.bubbleview.BubbleTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;

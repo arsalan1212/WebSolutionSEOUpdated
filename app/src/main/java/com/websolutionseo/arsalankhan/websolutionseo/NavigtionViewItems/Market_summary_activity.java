@@ -1,4 +1,4 @@
-package com.example.arsalankhan.websolutionseo.NavigtionViewItems;
+package com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems;
 
 import android.content.Intent;
 import android.os.Build;
@@ -13,8 +13,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.example.arsalankhan.websolutionseo.InterstitialAdService;
-import com.example.arsalankhan.websolutionseo.R;
+import com.websolutionseo.arsalankhan.websolutionseo.InterstitialAdService;
+import com.websolutionseo.arsalankhan.websolutionseo.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
