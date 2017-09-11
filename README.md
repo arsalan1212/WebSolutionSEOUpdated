@@ -116,8 +116,8 @@ ok now we will get release hash key with this commend
 finally we get release key hash :) enjoy
 
 
-##For this i have done it like this
+## For this i have done it like this
 1)<code keytool -exportcert -alias psxTraining -keystore "D:\key\psxTraining.jks" | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64></code>
 
-#SHA Certificate for release key
+# SHA Certificate for release key
 <code>keytool -exportcert -alias psxTraining -keystore D:\key\psxTraining.keystore.jks -list -v</code>
