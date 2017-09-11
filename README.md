@@ -63,12 +63,16 @@ OK! Lets Started to Get [Development Key Hashes] First
 
 Development Key Hashes
 
-keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64
+<code>keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64</code>
 
 
 Release Key Hash
 
-keytool -exportcert -alias YOUR_RELEASE_KEY_ALIAS -keystore YOUR_RELEASE_KEY_PATH | openssl sha1 -binary | openssl base64
+<code>keytool -exportcert -alias YOUR_RELEASE_KEY_ALIAS -keystore YOUR_RELEASE_KEY_PATH | openssl sha1 -binary | openssl base64</code>
+
+<strong> Full path is : <code>
+ keytool -exportcert -alias psxTraining -keystore "D:\key\psxTraining.jks" | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64
+</code></strong>
 
 for Release Key Hash
 
@@ -76,10 +80,10 @@ we need path of our keystore
 
 me i put it inside eclips 
 
-C:\Users\organic\Desktop\eclipse\mykeystore
+<code>C:\Users\organic\Desktop\eclipse\mykeystore
 
 path keytool C:\Program Files\Java\jre6\bin\keytool.exe
-path openssl C:\Users\organic\Desktop\openssl-0.9.8k_X64\bin\openssl.exe
+path openssl C:\Users\organic\Desktop\openssl-0.9.8k_X64\bin\openssl.exe </code>
 
 
 we need to know our alias key that we created in keystore
@@ -105,8 +109,15 @@ this is my alias aaga
 
 ok now we will get release hash key with this commend
 
-keytool -exportcert -alias aaga -keystore C:\Users\organic\Desktop\eclipse\mykeystore | C:\Users\organic\Desktop\openssl-0.9.8k_X64\bin\openssl.exe sha1 -binary | C:\Users\organic\Desktop\openssl-0.9.8k_X64\bin\openssl.exe base64
+<code>keytool -exportcert -alias aaga -keystore C:\Users\organic\Desktop\eclipse\mykeystore | C:\Users\organic\Desktop\openssl-0.9.8k_X64\bin\openssl.exe sha1 -binary | C:\Users\organic\Desktop\openssl-0.9.8k_X64\bin\openssl.exe base64</code>
 
 
 
 finally we get release key hash :) enjoy
+
+
+##For this i have done it like this
+1)<code keytool -exportcert -alias psxTraining -keystore "D:\key\psxTraining.jks" | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64></code>
+
+#SHA Certificate for release key
+<code>keytool -exportcert -alias psxTraining -keystore D:\key\psxTraining.keystore.jks -list -v</code>
