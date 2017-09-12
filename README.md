@@ -129,8 +129,10 @@ finally we get release key hash :) enjoy
                 (byte)0xA0, (byte)0x87, 0x65, (byte)0xF8, (byte)0x42, 0x0E, 0x6C, (byte)0x73, (byte)0xEB, (byte)0x46, (byte)0x0B, 0x42, (byte) 0xCF, (byte)0x96, (byte) 0x8E, (byte)0x4A, 0x54, 0x40, (byte)0x51, (byte)0x71
         };
        <i> 
+       
+       
         System.out.println("keyhashGooglePlaySignIn:"+ Base64.encodeToString(sha1, Base64.NO_WRAP));
-        
-        
-        Log.d("TAG","KEYHASH: "+Base64.encodeToString(sha1, Base64.NO_WRAP)); </i>
+       
+        Log.d("TAG","KEYHASH: "+Base64.encodeToString(sha1, Base64.NO_WRAP)); 
+        </i>
 </code>
