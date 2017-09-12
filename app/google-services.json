@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "82272576040-ad18j6g9ine9v2p7na0jk42b8n5ocloq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.com.arsalankhan.websolutionseo.arsalankhan.websolutionseo",
+            "certificate_hash": "a08765f8420e6c73eb460b42cf968e4a54405171"
+          }
+        },
+        {
           "client_id": "82272576040-vd7s4lvbpu3dsv2kmjviq1aplarmt6gh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
