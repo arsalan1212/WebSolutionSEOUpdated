@@ -121,3 +121,14 @@ finally we get release key hash :) enjoy
 
 # SHA Certificate for release key
 <code>keytool -exportcert -alias psxTraining -keystore D:\key\psxTraining.keystore.jks -list -v</code>
+# Key hash for facebook after uploading on PlayStore
+### SHA certificate is of App sign on PlayStore i mean playstore SHA certificate you have to enter
+<code>
+
+ // GOOGLE PLAY APP SIGNING SHA-1 KEY:- A0:87:65:F8:42:0E:6C:73:EB:46:0B:42:CF:96:8E:4A:54:40:51:71
+        byte[] sha1 = {
+                (byte)0xA0, (byte)0x87, 0x65, (byte)0xF8, (byte)0x42, 0x0E, 0x6C, (byte)0x73, (byte)0xEB, (byte)0x46, (byte)0x0B, 0x42, (byte) 0xCF, (byte)0x96, (byte) 0x8E, (byte)0x4A, 0x54, 0x40, (byte)0x51, (byte)0x71
+        };
+        System.out.println("keyhashGooglePlaySignIn:"+ Base64.encodeToString(sha1, Base64.NO_WRAP));
+        Log.d("TAG","KEYHASH: "+Base64.encodeToString(sha1, Base64.NO_WRAP));
+</code>
