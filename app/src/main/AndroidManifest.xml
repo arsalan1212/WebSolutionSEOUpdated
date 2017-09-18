@@ -38,11 +38,16 @@
         <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.SingleVideoActivity" />
+        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.SingleVideoActivity">
+            <intent-filter >
+                <action android:name="psxTraining.new.video"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
         <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,8 +66,16 @@
             android:name="com.websolutionseo.arsalankhan.websolutionseo.InterstitialAdService"
             android:exported="false" />
 
-        <activity android:name="com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity"
+        <activity
+            android:name="com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity"
             android:parentActivityName="com.websolutionseo.arsalankhan.websolutionseo.MainActivity"></activity>
+
+        <service android:name="com.websolutionseo.arsalankhan.websolutionseo.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

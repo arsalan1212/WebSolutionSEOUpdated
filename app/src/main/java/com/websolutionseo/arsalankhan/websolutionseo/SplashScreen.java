@@ -25,11 +25,42 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                Intent mainIntent = new Intent(SplashScreen.this,MainActivity.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(mainIntent);
-                finish();
+
+                //handle Notification Data
+                if(getIntent().getExtras() !=null && getIntent().getExtras().get("videoId")!= null){
+
+                for(String key : getIntent().getExtras().keySet()) {
+
+                    if (key.equals("title")) {
+                    } else if (key.equals("message")) {
+                    } else if (key.equals("click_action")) {
+                    }
+
+                    else if (key.equals("videoId")) {
+
+                        Intent intent = new Intent(getApplicationContext(), SingleVideoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("videoId", getIntent().getExtras().get(key).toString());
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                }
+
+                else{
+
+                    Intent mainIntent = new Intent(SplashScreen.this,MainActivity.class);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(mainIntent);
+                    finish();
+                }
+
             }
         }.start();
+    }
+
+    private void handleIntentData(){
+
     }
 }

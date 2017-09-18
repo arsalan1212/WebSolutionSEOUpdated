@@ -28,9 +28,6 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.websolutionseo.arsalankhan.websolutionseo.Adapter.VideoPlaylistAdapter;
-import com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
-import com.websolutionseo.arsalankhan.websolutionseo.helper.PlaylistHelper;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -38,6 +35,10 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.websolutionseo.arsalankhan.websolutionseo.Adapter.VideoPlaylistAdapter;
+import com.websolutionseo.arsalankhan.websolutionseo.NavigtionViewItems.Market_summary_activity;
+import com.websolutionseo.arsalankhan.websolutionseo.helper.PlaylistHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
     private static InterstitialAd myInterstitialAd;
     private Intent intentService;
     public static final String MAIN_ACTIVITY_NAME="activity_main";
+
+    String[] emails ={"mujahidkhan253@gmail.com", "psxon1@gmail.com",
+                       "developer.heerasol@gmail.com"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +117,11 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
         intentService.putExtra("activity_main",MAIN_ACTIVITY_NAME);
         startService(intentService);
 
+
+
+
     }
+
 
     private void setUpNavigationDrawer() {
 
@@ -160,6 +168,22 @@ public class MainActivity extends AppCompatActivity implements VideoPlaylistAdap
             signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(signInIntent);
             finish();
+        }
+        else{
+
+            String email = mCurrentUser.getEmail();
+
+            if(email.equals(emails[0]) || email.equals(emails[1]) || email.equals(emails[2])){
+
+                FirebaseMessaging.getInstance().subscribeToTopic("Owner");
+
+            }
+
+            /* if(email.equals("arsalan.ak777@gmail.com")){
+
+                FirebaseMessaging.getInstance().subscribeToTopic("Owner");
+            }*/
+
         }
 
     }
