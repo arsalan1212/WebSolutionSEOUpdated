@@ -11,6 +11,10 @@ This App take all Videos of a specific youtube Channel and then show it in a rec
 
 4) Clicking on a video will play the video in youtube player
 
+5) Chat Room
+
+6) Push Notification
+
 
 
 
@@ -117,7 +121,7 @@ finally we get release key hash :) enjoy
 
 
 ## For this i have done it like this
-1)<code keytool -exportcert -alias psxTraining -keystore "D:\key\psxTraining.jks" | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64></code>
+1)<code> keytool -exportcert -alias psxTraining -keystore "D:\key\psxTraining.jks" | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64</code>
 
 # SHA Certificate for release key
 <code>keytool -exportcert -alias psxTraining -keystore D:\key\psxTraining.keystore.jks -list -v</code>
