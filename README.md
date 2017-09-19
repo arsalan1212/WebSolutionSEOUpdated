@@ -121,6 +121,7 @@ finally we get release key hash :) enjoy
 
 
 ## For this i have done it like this
+ #### Open the command prompt here <code>C:\Program Files\Java\jdk1.8.0_102\bin</code> and paste the following  code
 1)<code> keytool -exportcert -alias psxTraining -keystore "D:\key\psxTraining.jks" | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64</code>
 
 # SHA Certificate for release key
