@@ -66,9 +66,11 @@ OK! Lets Started to Get [Development Key Hashes] First
 
 
 Development Key Hashes
+#### In debug mode Facebook key hash is generated as follow but first open CMD in this directory "C:\Program Files\Java\jdk1.8.0_102\bin"
 
-<code>keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64</code>
+<code>keytool -exportcert -alias androiddebugkey -keystore debug.keystore | "c:\openssl\bin\openssl.exe" sha1 -binary | "c:\openssl\bin\openssl.exe" base64</code>
 
+#### after pasting this in cmd and by pressing enter ask for the password and enter the password as `android`
 
 Release Key Hash
 
